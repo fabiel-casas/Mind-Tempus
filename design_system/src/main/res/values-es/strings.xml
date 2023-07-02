@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="appwidget_country_watch">Hora del País Mind Tempus</string>
+    <string name="title_activity_world_time_widget">Vista previa de la Hora Mundial</string>
+    <string name="widget_loading">Cargando...</string>
+    <string name="notification_title">¿Cómo te sientes hoy?</string>
+    <string name="notification_text">No olvides hacer tu diario</string>
+    <string name="notification_content_text">Texto de muestra</string>
+    <string name="emotional_status_save">Guardar</string>
+    <string name="journal_details_title_talk_about_it">¿Cuáles son tus pensamientos?</string>
+    <string name="emotional_status_title">Estado Emocional</string>
+    <string name="bottom_bar_journal_entries">Entradas</string>
+    <string name="bottom_bar_widgets">Widgets</string>
+    <string name="back_button">Volver</string>
+    <string name="country_list_pick_your_widget">Elige tu widget</string>
+    <string name="mind_tempus_add_new">Agregar nuevo</string>
+    <string name="mind_tempus_collapse">Colapsar</string>
+    <string name="mind_tempus_close">Cerrar</string>
+    <string name="mind_tempus_journal">Diario</string>
+    <string name="mind_tempus_widget">Widget</string>
+    <string name="mind_tempus_widget_pinned_go_to_homescreen">Widget fijado. Ir a la pantalla principal.</string>
+    <string name="mind_tempus_settings">Configuración</string>
+    <string name="settings_screen_switch_push_notifications">Notificaciones Push</string>
+    <string name="settings_screen_button_notification_time">Hora de notificación</string>
+    <string name="notification_channel_journal_reminder">Recordatorio de Diario</string>
+    <string name="settings_screen_button_emoji_time">Hora del Emoji</string>
+    <string name="emotionSelector_text_what_is_your_emotional_level">¿Cuál es tu nivel emocional?</string>
+    <string name="emotional_selector_slider_negative">Negativo</string>
+    <string name="emotional_selector_slider_positive">Positivo</string>
+    <string name="close_screen">Cerrar pantalla</string>
+    <string name="mindTempus_journal_title">Diario</string>
+    <string name="mindTempus_widgets_title">Widget de paises</string>
+</resources>

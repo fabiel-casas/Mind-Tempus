@@ -1,0 +1,86 @@
+[versions]
+androidGradlePlugin = "8.0.0"
+googleServicesPlugin = "4.3.15"
+firebaseCrashlyticsPlugin = "2.9.5"
+kotlinAndroidPlugin = "1.8.20"
+kotlinSerializationPlugin = "1.7.22"
+activityComposeVersion = "1.4.3"
+accompanistPermissionsVersion = "0.31.1-alpha"
+androidxTestJunitVersion = "1.1.5"
+appCompatVersion = "1.6.1"
+composeVersion = "2023.04.01"
+composeJUnit4Version = "1.4.3"
+coreKtxVersion = "1.10.0"
+composeMarkdownVersion = "0.3.4"
+composeCoilVersion = "2.3.0"
+composeConstraintLayoutVersion = "1.0.1"
+coroutinesAndroidVersion = "1.6.4"
+espressoCoreVersion = "3.5.1"
+firebaseBomVersion = "31.1.1"
+glanceAppwidgetHostVersion = "0.2.2"
+glanceAppwidgetVersion = "1.0.0-alpha05"
+glanceAppwidgetViewerVersion = "0.2.2"
+gsonVersion = "2.10.1"
+koinVersion = "3.3.2"
+koinAndroidComposeVersion = "3.4.1"
+lifecycleVersion = "2.6.1"
+playServicesAdsVersion = "22.0.0"
+navVersion = "2.5.3"
+materialVersion = "1.8.0"
+roomVersion = "2.5.1"
+serializationJsonVersion = "1.3.3"
+workRuntimeKtxVersion = "2.8.1"
+
+[libraries]
+activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
+accompanistPermissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanistPermissionsVersion" }
+androidxTestJunit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestJunitVersion" }
+appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompatVersion" }
+coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVersion" }
+composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeVersion" }
+composeCoil = { group = "io.coil-kt", name = "coil-compose", version.ref = "composeCoilVersion" }
+composeConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "composeConstraintLayoutVersion" }
+composeMarkdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdownVersion" }
+composeMaterial = { group = "androidx.compose.material", name = "material" }
+composeMaterial3 = { group = "androidx.compose.material3", name = "material3" }
+composeMaterial3WindowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+composeNavigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navVersion" }
+composeFoundation = { group = "androidx.compose.foundation", name = "foundation" }
+composeUi = { group = "androidx.compose.ui", name = "ui" }
+composeUiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+composeUiTestJunit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeJUnit4Version" }
+composeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+composeUiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+coroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesAndroidVersion" }
+espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
+firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBomVersion" }
+firebaseCrashlyticsKtx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebaseAnalyticsKtx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+glanceAppwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glanceAppwidgetVersion" }
+glanceWearTiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "glanceAppwidgetVersion" }
+glanceAppwidgetHost = { group = "com.google.android.glance.tools", name = "appwidget-host", version.ref = "glanceAppwidgetHostVersion" }
+glanceAppwidgetViewer = { group = "com.google.android.glance.tools", name = "appwidget-viewer", version.ref = "glanceAppwidgetViewerVersion" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
+junit = { group = "junit", name = "junit" }
+material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
+koinAndroidNavigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koinVersion" }
+koinAndroidxCompose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidComposeVersion" }
+koinCore = { group = "io.insert-koin", name = "koin-core", version.ref = "koinVersion" }
+koinTestJunit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koinVersion" }
+lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+playServicesAds = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAdsVersion" }
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "roomVersion" }
+roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "roomVersion" }
+roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomVersion" }
+serializationJson = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
+workRuntimeKtx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtxVersion" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
+gradle = { id = "com.android.tools.build.gradle", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroidPlugin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinAndroidPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }

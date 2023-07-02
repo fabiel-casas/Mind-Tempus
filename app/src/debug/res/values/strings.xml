@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Mind Tempus Debug</string>
+    <string name="adModKey" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="adModLoadAppUnit" translatable="false">ca-app-pub-3940256099942544/3419835294</string>
+    <string name="adModLoadAppBanner" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adModLoadAppBannerJournal" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="adJournalFinished" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+</resources>
