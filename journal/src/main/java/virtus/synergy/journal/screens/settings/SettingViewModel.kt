@@ -5,15 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import virtus.synergy.core.runCatch
-import virtus.synergy.mindtempus.notifications.NotificationCreator
 import virtus.synergy.journal.usecases.SettingUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import virtus.synergy.core.NotificationCreator
 import java.time.ZonedDateTime
 
 class SettingViewModel(
     private val settingUseCase: SettingUseCase,
-    private val notificationCreator: virtus.synergy.mindtempus.notifications.NotificationCreator,
+    private val notificationCreator: NotificationCreator,
 ) : ViewModel() {
 
     private val isNotificationEnabled = mutableStateOf(false)

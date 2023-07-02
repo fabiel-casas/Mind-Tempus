@@ -1,4 +1,5 @@
 package virtus.synergy.design_system.components
+/*
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,10 +20,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
+*/
 /**
  *
  * Created on 21/04/2023.
- */
+ *//*
+
 
 @Composable
 fun AdBottomBanner(
@@ -73,4 +76,4 @@ private fun AdBottomBannerPreview() {
     MindTempusTheme {
         AdBottomBanner(modifier = Modifier.fillMaxWidth())
     }
-}
+}*/

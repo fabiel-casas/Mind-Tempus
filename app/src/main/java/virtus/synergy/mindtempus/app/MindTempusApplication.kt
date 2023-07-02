@@ -1,11 +1,10 @@
 package virtus.synergy.mindtempus.app
 
 import android.app.Application
-import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext
+import org.koin.core.context.startKoin
 import virtus.synergy.analytics.AnalyticsHandler
 import virtus.synergy.journal.journalModule
 
@@ -19,9 +18,8 @@ class MindTempusApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        MobileAds.initialize(this)
         AnalyticsHandler.init()
-        GlobalContext.startKoin {
+        startKoin {
             // Log Koin into Android logger
             androidLogger()
             // Reference Android context

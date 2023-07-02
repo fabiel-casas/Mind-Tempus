@@ -97,7 +97,7 @@ fun MindTempusTheme(
 
 fun Context.colorSchemeWithDynamicColors(
     darkTheme: Boolean,
-    isDynamicColor: Boolean = true,
+    isDynamicColor: Boolean = false,
 ): ColorScheme {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     return when {

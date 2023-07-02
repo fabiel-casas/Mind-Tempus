@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -20,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -76,6 +78,7 @@ private fun JournalContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
             .flowTag("journal")
             .screenTag("createJournal")
             .elementTag("createJournalEntry")
@@ -94,9 +97,13 @@ private fun JournalContent(
                             contentDescription = stringResource(id = R.string.emotional_status_save)
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
             )
         },
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
         content = {
             Column(
                 modifier = Modifier

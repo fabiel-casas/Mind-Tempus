@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.composeMaterial3WindowSizeClass)
     implementation(libs.composeUiToolingPreview)
     implementation(libs.material)
-    implementation(libs.playServicesAds)
 
     debugImplementation(libs.composeUiTooling)
     debugImplementation(libs.composeUiTestManifest)

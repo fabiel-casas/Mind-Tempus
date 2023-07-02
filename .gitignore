@@ -26,3 +26,4 @@ local.properties
 git-crypt-key
 .gitsecret/keys/random_seed
 !*.secret
+/app/google-services.json
