@@ -1,0 +1,11 @@
+            - name: Sign Android release
+  # You may pin to the exact commit or the version.
+  # uses: r0adkll/sign-android-release@349ebdef58775b1e0d8099458af0816dc79b6407
+  uses: r0adkll/sign-android-release@v1
+  with:
+    # The directory to find your release to sign
+    releaseDirectory: ${{ github.workspace}} /app/build/outputs/apk/release/app-release.apk
+    signingKeyBase64: ${{secrets.APP_KEY_STORE}}
+    alias: ${{secrets.APP_ALIAS}}
+    keyStorePassword: ${{secrets.APP_STORE_PASS}}
+    keyPassword: ${{secrets.APP_PASS}}
