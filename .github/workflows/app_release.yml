@@ -10,19 +10,19 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Decode Keystore
-         env:
-           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
-           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
-         run:
-           echo $ENCODED_STRING > keystore-b64.txt
-           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+        env:
+          ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+        run:
+          echo $ENCODED_STRING > keystore-b64.txt
+          base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
       - name: Build Release bundle
-         env:
-           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
-           SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
-           SIGNING_KEY_PASSWORD: ${{ secrets.ALIAS_CODE }}
-           SIGNING_STORE_PASSWORD: ${{ secrets.USER_CODE }}
-         run: ./gradlew bundleRelease
+        env:
+          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
+          SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.ALIAS_CODE }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.USER_CODE }}
+        run: ./gradlew bundleRelease
       - name: Publish to Google play store
         uses: r0adkll/upload-google-play@v1
           with:
@@ -37,9 +37,9 @@ jobs:
             mappingFile: app/build/outputs/mapping/release/mapping.txt
             debugSymbols: app/intermediates/merged_native_libs/release/out/lib
       - name: Create Github Release
-         uses: softprops/action-gh-release@v1
-         with:
-           generate_release_notes: true
-           prerelease: true
-           files:
-             app/build/outputs/bundle/release/app-release.aab
+        uses: softprops/action-gh-release@v1
+          with:
+            generate_release_notes: true
+            prerelease: true
+            files:
+              app/build/outputs/bundle/release/app-release.aab
