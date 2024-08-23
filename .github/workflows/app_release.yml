@@ -3,8 +3,8 @@ run-name: ${{ github.actor }} is preparin a new release 🚀
 on:
   workflow_dispatch:
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
+  GitHub-Actions:
+    runs-on: [ self-hosted, macOS, android ]
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
