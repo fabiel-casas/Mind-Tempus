@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 jobs:
   GitHub-Actions:
-    runs-on: [ macOS, android ]
+    runs-on: [ ubuntu-latest, android ]
     timeout-minutes: 15
     steps:
       - name: Check out repository code
