@@ -1,5 +1,7 @@
 name: Mind Tempus quick release
 run-name: ${{ github.actor }} is preparin a new release 🚀
+on:
+  workflow_call:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
