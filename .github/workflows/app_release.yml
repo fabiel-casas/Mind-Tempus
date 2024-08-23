@@ -25,21 +25,21 @@ jobs:
         run: ./gradlew bundleRelease
       - name: Publish to Google play store
         uses: r0adkll/upload-google-play@v1
-          with:
-            serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-            packageName: com.example.MyApp
-            releaseFiles: app/build/outputs/bundle/release/app-release.aab
-            track: production
-            status: inProgress
-            inAppUpdatePriority: 2
-            userFraction: 0.10
-            whatsNewDirectory: distribution/whatsnew
-            mappingFile: app/build/outputs/mapping/release/mapping.txt
-            debugSymbols: app/intermediates/merged_native_libs/release/out/lib
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.example.MyApp
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: production
+          status: inProgress
+          inAppUpdatePriority: 2
+          userFraction: 0.10
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: app/build/outputs/mapping/release/mapping.txt
+          debugSymbols: app/intermediates/merged_native_libs/release/out/lib
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
-          with:
-            generate_release_notes: true
-            prerelease: true
-            files:
-              app/build/outputs/bundle/release/app-release.aab
+        with:
+          generate_release_notes: true
+          prerelease: true
+          files:
+            app/build/outputs/bundle/release/app-release.aab
