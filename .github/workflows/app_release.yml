@@ -58,7 +58,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.ALIAS_CODE }}
           SIGNING_STORE_PASSWORD: ${{ secrets.USER_CODE }}
-        run: ./gradlew bundleRelease
+        run: ./gradlew assembleRelease
 
       - name: Publish to Google play store
         uses: r0adkll/upload-google-play@v1
