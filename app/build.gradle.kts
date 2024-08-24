@@ -6,17 +6,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
-
 android {
     namespace = "virtus.synergy.mindtempus"
-    compileSdk = 33
+    compileSdk = 34
+    val appVersionCode: Int by rootProject.extra
 
     defaultConfig {
         applicationId = "virtus.synergy.mindtempus"
         minSdk = 28
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 34
+        versionCode = appVersionCode
+        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -37,6 +37,17 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+    signingConfigs {
+        create("release") {
+            val fileName = System.getenv("SIGNING_KEY_STORE_PATH")
+            if (fileName != null) {
+                storeFile = file(fileName)
+                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            }
         }
     }
     compileOptions {
