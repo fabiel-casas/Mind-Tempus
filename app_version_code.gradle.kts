@@ -1,1 +1,1 @@
-val appVersionCode by extra { 1 }
+val appVersionCode by extra { 2 }
