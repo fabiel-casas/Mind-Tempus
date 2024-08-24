@@ -49,6 +49,9 @@ jobs:
           echo GOOGLE_SERVICE_ENCODED_STRING > google-service-b64.txt
           base64 -d google-service-b64.txt > GOOGLE_SERVICE_FILE_PATH
 
+      - name: Copy google-services.json
+        run: cp app/google-services.json app/src/release/google-services.json
+
       - name: Build Release bundle
         env:
           SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
