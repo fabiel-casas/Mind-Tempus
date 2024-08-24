@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "virtus.synergy.design_system"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 28
