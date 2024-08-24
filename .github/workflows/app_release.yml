@@ -46,10 +46,7 @@ jobs:
           GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
           GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
         run:
-          echo GOOGLE_SERVICE_ENCODED_STRING > /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
-
-      - name: Build Project
-        run: ./gradlew build
+          echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
 
       - name: Build Release bundle
         env:
@@ -57,7 +54,7 @@ jobs:
           SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.ALIAS_CODE }}
           SIGNING_STORE_PASSWORD: ${{ secrets.USER_CODE }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew bundleRelease
 
       - name: Publish to Google play store
         uses: r0adkll/upload-google-play@v1
