@@ -46,7 +46,7 @@ jobs:
           GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
           GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
         run:
-          echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
+          echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  $GOOGLE_SERVICE_FILE_PATH
 
       - name: Build Release bundle
         env:
