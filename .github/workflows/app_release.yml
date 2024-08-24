@@ -46,8 +46,7 @@ jobs:
           GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
           GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
         run:
-          echo GOOGLE_SERVICE_ENCODED_STRING > google-service-b64.txt
-          base64 -d google-service-b64.txt > GOOGLE_SERVICE_FILE_PATH
+          echo GOOGLE_SERVICE_ENCODED_STRING > GOOGLE_SERVICE_FILE_PATH
 
       - name: Copy google-services.json
         run: cp GOOGLE_SERVICE_FILE_PATH /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
