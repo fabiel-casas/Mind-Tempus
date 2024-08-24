@@ -1,5 +1,5 @@
 name: Mind Tempus quick release
-run-name: ${{ github.actor }} is preparin a new release 🚀
+run-name: ${{ github.actor }} is preparing a new release 🚀
 on:
   workflow_dispatch:
 jobs:
@@ -40,6 +40,14 @@ jobs:
         run:
           echo $ENCODED_STRING > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
+
+      - name: Decode Google Service File
+        env:
+          GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
+          GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
+        run:
+          echo GOOGLE_SERVICE_ENCODED_STRING > google-service-b64.txt
+          base64 -d google-service-b64.txt > GOOGLE_SERVICE_FILE_PATH
 
       - name: Build Release bundle
         env:
