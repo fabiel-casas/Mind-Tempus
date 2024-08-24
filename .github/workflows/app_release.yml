@@ -46,11 +46,10 @@ jobs:
           GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
           GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
         run:
-          echo GOOGLE_SERVICE_ENCODED_STRING > GOOGLE_SERVICE_FILE_PATH
+          echo GOOGLE_SERVICE_ENCODED_STRING > /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
 
-      - name: Copy google-services.json
-        run:
-          cp GOOGLE_SERVICE_FILE_PATH /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
+      - name: Build Project
+        run: ./gradlew build
 
       - name: Build Release bundle
         env:
