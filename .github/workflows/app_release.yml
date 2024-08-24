@@ -50,7 +50,6 @@ jobs:
 
       - name: Copy google-services.json
         run:
-          cp GOOGLE_SERVICE_FILE_PATH /Users/runner/work/Mind-Tempus/Mind-Tempus/app/src/google-services.json
           cp GOOGLE_SERVICE_FILE_PATH /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
 
       - name: Build Release bundle
