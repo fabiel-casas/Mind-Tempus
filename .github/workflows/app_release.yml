@@ -50,7 +50,7 @@ jobs:
           base64 -d google-service-b64.txt > GOOGLE_SERVICE_FILE_PATH
 
       - name: Copy google-services.json
-        run: cp /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json /Users/runner/work/Mind-Tempus/Mind-Tempus/app/src/release/google-services.json
+        run: cp GOOGLE_SERVICE_FILE_PATH /Users/runner/work/Mind-Tempus/Mind-Tempus/app/google-services.json
 
       - name: Build Release bundle
         env:
