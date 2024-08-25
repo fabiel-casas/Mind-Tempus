@@ -47,6 +47,17 @@ jobs:
           GOOGLE_SERVICE_FILE_PATH: ${{ secrets.GOOGLE_SERVICE_FILE_PATH }}
         run:
           echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  $GOOGLE_SERVICE_FILE_PATH
+      - name: Increment version code
+        run:
+          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { $(( $(grep -oP "val appVersionCode by extra { \K[0-9]+" app_version_code.gradle.kts) + 1)) }/' app_version_code.gradle.kts
+
+      - name: Commit and push version code increment
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add app_version_code.gradle.kts
+          git commit -m 'Increment version code'
+          git push origin ${{ github.ref }}
 
       - name: Build Release bundle
         env:
@@ -64,8 +75,6 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: production
           status: inProgress
-          inAppUpdatePriority: 2
-          userFraction: 0.10
           mappingFile: app/build/outputs/mapping/release/mapping.txt
           debugSymbols: app/intermediates/merged_native_libs/release/out/lib
 
