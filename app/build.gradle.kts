@@ -23,13 +23,10 @@ android {
     }
     signingConfigs {
         create("release") {
-            val fileName = System.getenv("SIGNING_KEY_STORE_PATH")
-            if (fileName != null) {
-                storeFile = file(fileName)
-                storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-                keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-                keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
-            }
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+            storeFile = System.getenv("SIGNING_KEY_STORE_PATH")?.let { file(it) }
         }
     }
 
