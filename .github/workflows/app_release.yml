@@ -80,7 +80,6 @@ jobs:
           packageName: virtus.synergy.mindtempus
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: production
-          status: inProgress
           mappingFile: app/build/outputs/mapping/release/mapping.txt
           debugSymbols: app/intermediates/merged_native_libs/release/out/lib
 
