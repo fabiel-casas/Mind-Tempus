@@ -45,7 +45,7 @@ jobs:
         env:
           KEY_STORE_DATA: ${{ secrets.KEY_STORE_DATA }}
         run:
-          echo $KEY_STORE_DATA | base64 -d > /Users/runner/work/Mind-Tempus/Mind-Tempus/keystore.properties
+          echo $KEY_STORE_DATA | base64 -d > /Users/runner/work/Mind-Tempus/Mind-Tempus/key.properties
 
       - name: Decode Google Service File
         env:
