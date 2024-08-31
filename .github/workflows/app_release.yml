@@ -41,6 +41,12 @@ jobs:
           echo $ENCODED_STRING > keystore-b64.txt
           base64 -d keystore-b64.txt > $SIGNING_KEY_STORE_PATH
 
+      - name: Decode Key Store Data
+        env:
+          KEY_STORE_DATA: ${{ secrets.KEY_STORE_DATA }}
+        run:
+          echo $KEY_STORE_DATA | base64 -d > /Users/runner/work/Mind-Tempus/Mind-Tempus/keystore.properties
+
       - name: Decode Google Service File
         env:
           GOOGLE_SERVICE_ENCODED_STRING: ${{ secrets.GOOGLE_SERVICE_ENCODED_STRING }}
