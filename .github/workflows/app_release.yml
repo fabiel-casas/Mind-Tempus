@@ -66,11 +66,6 @@ jobs:
           git push origin ${{ github.ref }}
 
       - name: Build Release bundle
-        env:
-          SIGNING_KEY_STORE_PATH: ${{ secrets.SIGNING_KEY_STORE_PATH }}
-          SIGNING_KEY_ALIAS: ${{ secrets.ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.ALIAS_CODE }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.USER_CODE }}
         run: ./gradlew bundleRelease
 
       - name: Publish to Google play store
