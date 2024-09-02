@@ -55,19 +55,16 @@ jobs:
 
       - name: Increment version code
         run: |
-          current_version=$(awk '/val appVersionCode by extra/ {print $NF}' app_version_code.gradle.kts | tr -d '{}')
-          new_version=$((current_version + 1))
-          sed -i '' "s/val appVersionCode by extra { $current_version }/val appVersionCode by extra { $new_version }/" app_version_code.gradle.kts
+          sed -i 's/\(val appVersionCode by extra { $GITHUB_RUN_NUMBER }/' aap_version_code.gradle.kts
 
       - name: Commit and push version code increment
         env:
           GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
         run:
-          set -x
           git config --global user.name '${{ github.actor }}'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add app_version_code.gradle.kts
-          git commit -m 'Increment version code'
+          git commit -m "Increment version code to ${{ GITHUB_RUN_NUMBER }}"
           git push origin ${{ github.ref }}
 
       - name: Build Release bundle
