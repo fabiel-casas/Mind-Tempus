@@ -1,1 +1,1 @@
-val appVersionCode by extra { $env:GITHUB_RUN_NUMBER }
+val appVersionCode by extra { 5 }
