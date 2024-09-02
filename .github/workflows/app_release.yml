@@ -55,7 +55,7 @@ jobs:
 
       - name: Increment version code
         run: |
-          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { $env:GITHUB_RUN_NUMBER }/' /Users/runner/work/MindTempus/Mind-Tempus/app_version_code.gradle.kts
+          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { $env:GITHUB_RUN_NUMBER }/' /Users/runner/work/Mind-Tempus/Mind-Tempus/app_version_code.gradle.kts
 
       - name: Commit and push version code increment
         env:
