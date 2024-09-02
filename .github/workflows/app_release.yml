@@ -56,10 +56,8 @@ jobs:
           echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  $GOOGLE_SERVICE_FILE_PATH
 
       - name: Increment version code
-        env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
         run: |
-          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { $GITHUB_RUN_NUMBER }/' /Users/runner/work/Mind-Tempus/Mind-Tempus/app_version_code.gradle.kts
+          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { ${{ github.run_number }} }/' /Users/runner/work/Mind-Tempus/Mind-Tempus/app_version_code.gradle.kts
 
       - name: Commit and push version code increment
         env:
