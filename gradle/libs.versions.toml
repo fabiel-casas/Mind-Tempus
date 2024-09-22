@@ -3,6 +3,7 @@ androidGradlePlugin = "8.1.4"
 googleServicesPlugin = "4.4.2"
 firebaseCrashlyticsPlugin = "3.0.2"
 kotlinAndroidPlugin = "1.8.20"
+kotlinGradlePluginVersion = "1.8.20"
 kotlinSerializationPlugin = "1.7.22"
 activityComposeVersion = "1.9.1"
 accompanistPermissionsVersion = "0.31.1-alpha"
@@ -30,6 +31,7 @@ materialVersion = "1.12.0"
 roomVersion = "2.6.1"
 serializationJsonVersion = "1.3.3"
 workRuntimeKtxVersion = "2.9.1"
+githubTripletPlayVersion = "3.11.0"
 
 [libraries]
 activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
@@ -62,6 +64,7 @@ glanceAppwidgetHost = { group = "com.google.android.glance.tools", name = "appwi
 glanceAppwidgetViewer = { group = "com.google.android.glance.tools", name = "appwidget-viewer", version.ref = "glanceAppwidgetViewerVersion" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
 junit = { group = "junit", name = "junit" }
+kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 koinAndroidNavigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koinVersion" }
 koinAndroidxCompose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidComposeVersion" }
@@ -84,3 +87,4 @@ gradle = { id = "com.android.tools.build.gradle", version.ref = "androidGradlePl
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinAndroidPlugin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinAndroidPlugin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }
+github-triplet-play = { id = "com.github.triplet.play", version.ref = "githubTripletPlayVersion" }

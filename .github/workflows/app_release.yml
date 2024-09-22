@@ -35,6 +35,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Increment version code
+        run: |
+          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { ${{ github.run_number }} }/' /Users/runner/work/Mind-Tempus/Mind-Tempus/app_version_code.gradle.kts
+
+      - name: Commit and push version code increment
+        env:
+          GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${{ secrets.G_TOKEN }}@github.com/${{ github.repository }}
+          git add app_version_code.gradle.kts
+          git commit -m "Increment version code"
+          git push origin ${{ github.ref }}
+
       - name: Decode Keystore
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEY_STORE_BASE64 }}
@@ -55,32 +70,17 @@ jobs:
         run:
           echo $GOOGLE_SERVICE_ENCODED_STRING | base64 -d >  $GOOGLE_SERVICE_FILE_PATH
 
-      - name: Increment version code
-        run: |
-          sed -i '' 's/val appVersionCode by extra { [0-9]* }/val appVersionCode by extra { ${{ github.run_number }} }/' /Users/runner/work/Mind-Tempus/Mind-Tempus/app_version_code.gradle.kts
-
-      - name: Commit and push version code increment
-        env:
-          GITHUB_TOKEN: ${{ secrets.G_TOKEN }}
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git remote set-url origin https://x-access-token:${{ secrets.G_TOKEN }}@github.com/${{ github.repository }}
-          git add app_version_code.gradle.kts
-          git commit -m "Increment version code"
-          git push origin ${{ github.ref }}
-
       - name: Build Release bundle
         run: ./gradlew bundleRelease
 
+      - name: Decode Google Service File
+        env:
+          KEY_STORE_DATA: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+        run:
+          echo $KEY_STORE_DATA | base64 -d > /Users/runner/work/Mind-Tempus/Mind-Tempus/app/mind-tempus.json
+
       - name: Publish to Google play store
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: virtus.synergy.mindtempus
-          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: production
-          mappingFile: app/build/outputs/mapping/release/mapping.txt
+        run: ./gradlew publishBundle
 
       - name: Create Github Release
         uses: softprops/action-gh-release@v1

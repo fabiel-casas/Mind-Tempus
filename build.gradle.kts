@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+        classpath(libs.kotlinGradlePlugin)
     }
 }
 apply("app_version_code.gradle.kts")

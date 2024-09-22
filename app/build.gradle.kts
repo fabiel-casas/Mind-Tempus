@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.github.triplet.play)
 }
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -80,6 +81,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+play {
+    serviceAccountCredentials.set(file("mind-tempus.json"))
 }
 
 dependencies {
