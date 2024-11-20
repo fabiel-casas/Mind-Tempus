@@ -37,7 +37,7 @@ class EmotionsSelectorViewModel(
     fun onEmojiSelected(emoji: String) {
         viewModelScope.launch(Dispatchers.IO) {
             resultCatching {
-                journalUseCase.createEmotionEntry(
+                journalUseCase.createJournalEntryWithEmotionLevel(
                     emotionLevel = emotionLevel.value.toInt(),
                     emoji = emoji
                 )

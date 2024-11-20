@@ -11,7 +11,7 @@ data class JournalInfo(
     val title: String = "",
     val note: String = "",
     val emoji: String = "",
-    val emotionalIndex: Int = 0,
+    val emotionalIndex: Int? = null,
 )
 
 

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.UUID
 
 /**
  *
@@ -21,10 +22,14 @@ class JournalUseCaseImpl(
     dataBase: MindTempusDataBase
 ) : JournalUseCase {
     private val journalDao = dataBase.journalDao()
-    override suspend fun createEmotionEntry(emotionLevel: Int, emoji: String): String {
+    override suspend fun createJournalEntryWithEmotionLevel(emotionLevel: Int, emoji: String): String {
         val newEmotionalStatus = journalEntryTable(emotionLevel = emotionLevel, emoji = emoji)
-        journalDao.createJournalEntry(newEmotionalStatus)
+        createJournalEntry(newEmotionalStatus)
         return newEmotionalStatus.id
+    }
+
+    private suspend fun createJournalEntry(newEmotionalStatus: JournalEntryTable) {
+        journalDao.createJournalEntry(newEmotionalStatus)
     }
 
     override suspend fun updateJournalNote(journalId: String, note: String) {
@@ -36,10 +41,12 @@ class JournalUseCaseImpl(
     }
 
     private fun journalEntryTable(
-        emotionLevel: Int,
+        id: String = UUID.randomUUID().toString(),
+        emotionLevel: Int = -1,
         emoji: String = "",
         entry: String = "",
     ) = JournalEntryTable(
+        id = id,
         emotionalLevel = emotionLevel,
         emoji = emoji,
         note = entry,
@@ -56,9 +63,12 @@ class JournalUseCaseImpl(
             }
     }
 
-    override fun getJournalBy(journalId: String): JournalInfo {
+    override suspend fun getOrCreateJournalEntryBy(journalId: String): JournalInfo {
         return journalDao.getJournalBy(journalId = journalId)
-            ?.toJournalInfo() ?: throw Exception("Journal not found")
+            ?.toJournalInfo() ?: journalEntryTable(id = journalId).let {
+                createJournalEntry(it)
+                it.toJournalInfo()
+        }
     }
 
     private fun JournalEntryTable.toJournalInfo() = JournalInfo(

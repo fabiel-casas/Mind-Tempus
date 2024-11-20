@@ -12,7 +12,7 @@ data class JournalEntryTable(
     @SerializedName("id")
     @PrimaryKey
     val id: String = UUID.randomUUID().toString(),
-    @SerializedName("emotionalLevel") val emotionalLevel: Int,
+    @SerializedName("emotionalLevel") val emotionalLevel: Int = -1, // Lower than zero means not set
     @SerializedName("emotionalStatus") val emoji: String = "",
     @SerializedName("comment") val note: String,
     @SerializedName("creationTime") val creationTime: ZonedDateTime,

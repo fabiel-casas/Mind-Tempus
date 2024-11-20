@@ -21,7 +21,7 @@ class JournalDetailsViewModel(
     fun loadJournal(journalId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             resultCatching {
-                journalUseCase.getJournalBy(journalId)
+                journalUseCase.getOrCreateJournalEntryBy(journalId)
             }.onSuccess {
                 this@JournalDetailsViewModel.journalId = journalId
                 journalInfo.value = it
