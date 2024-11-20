@@ -1,12 +1,8 @@
 package virtus.synergy.journal
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.room.Room
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 import virtus.synergy.journal.extensions.JsonFileUtils
 import virtus.synergy.journal.model.db.MindTempusDataBase
@@ -45,16 +41,8 @@ val journalModule = module {
     factory<SettingUseCase> {
         SettingUseCaseImpl(get())
     }
-    viewModel {
-        JournalDetailsViewModel(get())
-    }
-    viewModel {
-        JournalListViewModel(get())
-    }
-    viewModel {
-        SettingViewModel(get(), get())
-    }
-    viewModel {
-        EmotionsSelectorViewModel(get())
-    }
+    viewModelOf(::JournalDetailsViewModel)
+    viewModelOf(::JournalListViewModel)
+    viewModelOf(::SettingViewModel)
+    viewModelOf(::EmotionsSelectorViewModel)
 }

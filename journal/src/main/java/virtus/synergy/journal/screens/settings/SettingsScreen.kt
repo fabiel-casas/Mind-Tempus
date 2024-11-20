@@ -32,15 +32,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ElementType
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
 import virtus.synergy.analytics.ui.screenTag
 import virtus.synergy.design_system.R
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import org.koin.androidx.compose.getViewModel
 import java.time.ZonedDateTime
 
 
@@ -48,7 +48,7 @@ import java.time.ZonedDateTime
 @Composable
 fun SettingsScreen(
     onBackAction: () -> Unit,
-    viewModel: SettingViewModel = getViewModel(),
+    viewModel: SettingViewModel = koinViewModel(),
     onOpenExternalActivity: (Intent) -> Unit
 ) {
     LaunchedEffect(key1 = viewModel, block = {

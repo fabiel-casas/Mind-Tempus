@@ -18,9 +18,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +30,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import dev.jeziellago.compose.markdowntext.MarkdownText
+import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
 import virtus.synergy.analytics.ui.screenTag
@@ -37,8 +39,6 @@ import virtus.synergy.analytics.ui.trackOnDisplay
 import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.MTIconButton
 import virtus.synergy.design_system.components.NavigationTopAppBar
-import dev.jeziellago.compose.markdowntext.MarkdownText
-import org.koin.androidx.compose.getViewModel
 
 /**
  *
@@ -46,7 +46,7 @@ import org.koin.androidx.compose.getViewModel
  */
 @Composable
 fun JournalEntryScreen(
-    viewModel: JournalDetailsViewModel = getViewModel(),
+    viewModel: JournalDetailsViewModel = koinViewModel(),
     onBackAction: () -> Unit,
     journalId: String,
 ) {
@@ -165,7 +165,7 @@ fun EmotionalDescription(
             )
         },
         textStyle = MaterialTheme.typography.bodyLarge,
-        colors = TextFieldDefaults.outlinedTextFieldColors(),
+        colors = OutlinedTextFieldDefaults.colors(),
         shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Text,

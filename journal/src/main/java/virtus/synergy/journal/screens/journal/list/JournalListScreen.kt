@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
 import virtus.synergy.analytics.ui.screenTag
@@ -55,7 +55,7 @@ import virtus.synergy.journal.Constants.emotionalListState
  */
 @Composable
 fun JournalListScreen(
-    viewModel: JournalListViewModel = getViewModel(),
+    viewModel: JournalListViewModel = koinViewModel(),
     navigateToCreateEntry: () -> Unit,
     navigateToSetting: () -> Unit,
     navigateToJournal: (journalId: String) -> Unit,

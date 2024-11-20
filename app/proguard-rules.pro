@@ -22,6 +22,7 @@
 
 -keep public class virtus.synergy.core.DataClass
 -keep class kotlinx.coroutines.android.** {*;}
+-keep class org.koin.** { *; }
 -keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
 -keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
 

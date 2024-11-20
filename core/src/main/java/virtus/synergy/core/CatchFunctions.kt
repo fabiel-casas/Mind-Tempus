@@ -13,8 +13,7 @@ inline fun runCatch(block: () -> Unit) {
     try {
         block()
     } catch (exception: Throwable) {
-        Firebase.crashlytics.recordException(exception)
-        exception.printStackTrace()
+        exception.logError()
     }
 }
 
@@ -22,8 +21,7 @@ inline fun <R> resultCatching(block: () -> R): Result<R> {
     return try {
         Result.success(block())
     } catch (exception: Throwable) {
-        Firebase.crashlytics.recordException(exception)
-        exception.printStackTrace()
+        exception.logError()
         Result.failure(exception)
     }
 }

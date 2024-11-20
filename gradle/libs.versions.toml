@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.1.4"
+androidGradlePlugin = "8.7.2"
 googleServicesPlugin = "4.4.2"
 firebaseCrashlyticsPlugin = "3.0.2"
 kotlinAndroidPlugin = "1.8.20"
@@ -9,21 +9,20 @@ activityComposeVersion = "1.9.1"
 accompanistPermissionsVersion = "0.31.1-alpha"
 androidxTestJunitVersion = "1.2.1"
 appCompatVersion = "1.7.0"
-composeVersion = "2024.08.00"
+composeVersion = "2024.11.00"
 composeJUnit4Version = "1.6.8"
-coreKtxVersion = "1.13.1"
+coreKtxVersion = "1.15.0"
 composeMarkdownVersion = "0.3.4"
 composeCoilVersion = "2.3.0"
 composeConstraintLayoutVersion = "1.0.1"
 coroutinesAndroidVersion = "1.7.3"
 espressoCoreVersion = "3.6.1"
-firebaseBomVersion = "33.2.0"
+firebaseBomVersion = "33.6.0"
 glanceAppwidgetHostVersion = "0.2.2"
 glanceAppwidgetVersion = "1.1.0"
 glanceAppwidgetViewerVersion = "0.2.2"
 gsonVersion = "2.10.1"
-koinVersion = "3.5.6"
-koinAndroidComposeVersion = "3.4.5"
+koinVersion = "4.0.0"
 lifecycleVersion = "2.8.4"
 playServicesAdsVersion = "23.3.0"
 navVersion = "2.7.7"
@@ -67,7 +66,7 @@ junit = { group = "junit", name = "junit" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 koinAndroidNavigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koinVersion" }
-koinAndroidxCompose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidComposeVersion" }
+koinAndroidxCompose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinVersion" }
 koinCore = { group = "io.insert-koin", name = "koin-core", version.ref = "koinVersion" }
 koinTestJunit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koinVersion" }
 lifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }

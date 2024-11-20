@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ui.analyticsProperties
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
@@ -40,7 +41,6 @@ import virtus.synergy.analytics.ui.trackableClick
 import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.NavigationTopAppBar
 import virtus.synergy.design_system.theme.MindTempusTheme
-import org.koin.androidx.compose.getViewModel
 
 /**
  *
@@ -48,7 +48,7 @@ import org.koin.androidx.compose.getViewModel
  */
 @Composable
 fun EmotionsSelectorScreen(
-    viewModel: EmotionsSelectorViewModel = getViewModel(),
+    viewModel: EmotionsSelectorViewModel = koinViewModel(),
     onBackAction: () -> Unit,
     onNavigateToJournal: (journalId: String) -> Unit,
 ) {

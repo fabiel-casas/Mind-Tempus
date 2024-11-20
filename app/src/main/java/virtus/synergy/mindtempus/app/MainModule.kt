@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import virtus.synergy.core.NotificationCreator
@@ -20,7 +21,7 @@ val mainModule = module {
         CoroutineScope(SupervisorJob() + Dispatchers.IO)
     }
     factory<SharedPreferences> {
-        get<Context>().getSharedPreferences("app.conf", Context.MODE_PRIVATE)
+        androidContext().getSharedPreferences("app.conf", Context.MODE_PRIVATE)
     }
     factory<NotificationCreator> {
         NotificationScheduler(get(), get())

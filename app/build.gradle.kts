@@ -21,13 +21,13 @@ keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
     namespace = "virtus.synergy.mindtempus"
-    compileSdk = 34
+    compileSdk = 35
     val appVersionCode: Int by rootProject.extra
 
     defaultConfig {
         applicationId = "virtus.synergy.mindtempus"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = appVersionCode
         versionName = "0.0.1"
 
