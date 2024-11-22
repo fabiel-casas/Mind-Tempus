@@ -8,6 +8,7 @@
     <string name="notification_text">No olvides hacer tu diario</string>
     <string name="notification_content_text">Texto de muestra</string>
     <string name="emotional_status_save">Guardar</string>
+    <string name="journal_entry_add_new_entry">Agregar nueva linea</string>
     <string name="journal_details_title_talk_about_it">¿Cuáles son tus pensamientos?</string>
     <string name="emotional_status_title">Estado Emocional</string>
     <string name="bottom_bar_journal_entries">Entradas</string>

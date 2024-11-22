@@ -1,5 +1,7 @@
 package virtus.synergy.journal.usecases
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import virtus.synergy.core.toDayMonthYearTime
 import virtus.synergy.core.toDayOfTheWeek
 import virtus.synergy.core.toHourMinutes
@@ -10,6 +12,8 @@ import virtus.synergy.journal.screens.journal.details.JournalInfo
 import virtus.synergy.journal.screens.journal.list.JournalItemState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import virtus.synergy.journal.screens.journal.details.Paragraph
+import virtus.synergy.journal.screens.journal.details.ParagraphType
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -73,10 +77,21 @@ class JournalUseCaseImpl(
 
     private fun JournalEntryTable.toJournalInfo() = JournalInfo(
         title = creationTime.toDayMonthYearTime(),
-        note = note,
+        paragraph = toParagraphList(),
         emoji = emoji,
         emotionalIndex = emotionalLevel
     )
+
+    private fun JournalEntryTable.toParagraphList(): List<Paragraph> = if (note.isEmpty()) {
+        listOf(
+            Paragraph(
+                type = ParagraphType.TITLE,
+                data = ""
+            )
+        )
+    } else {
+        Gson().fromJson(note, object : TypeToken<List<Paragraph>>() {}.type)
+    }
 
     private fun JournalEntryTable.toState(): JournalItemState = JournalItemState(
         id = id,

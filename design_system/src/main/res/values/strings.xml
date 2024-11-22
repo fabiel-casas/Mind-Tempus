@@ -6,6 +6,7 @@
     <string name="notification_text">Don\'t forget to journal</string>
     <string name="notification_content_text">Sample Text</string>
     <string name="emotional_status_save">Save</string>
+    <string name="journal_entry_add_new_entry">Add new entry</string>
     <string name="journal_details_title_talk_about_it">What are your thoughts?</string>
     <string name="emotional_status_title">Emotional Status</string>
     <string name="bottom_bar_journal_entries">Entries</string>

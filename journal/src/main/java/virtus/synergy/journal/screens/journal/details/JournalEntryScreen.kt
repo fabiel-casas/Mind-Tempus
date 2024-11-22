@@ -1,36 +1,42 @@
 package virtus.synergy.journal.screens.journal.details
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.jeziellago.compose.markdowntext.MarkdownText
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
@@ -39,6 +45,8 @@ import virtus.synergy.analytics.ui.trackOnDisplay
 import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.MTIconButton
 import virtus.synergy.design_system.components.NavigationTopAppBar
+import virtus.synergy.design_system.theme.MindTempusTheme
+import java.util.UUID
 
 /**
  *
@@ -54,26 +62,30 @@ fun JournalEntryScreen(
         viewModel.loadJournal(journalId = journalId)
     })
     val state = viewModel.state
-    JournalContent(
+    JournalEntryScreenContent(
         state = state,
         onBackAction = onBackAction,
         onSaveAction = {
             viewModel.updateJournalNotes()
             onBackAction()
         },
-        onJournalEntryChange = { newDescription ->
-            viewModel.updateEmotionalDescription(newDescription)
+        onJournalEntryChange = { index, paragraph ->
+            viewModel.updateEmotionalDescription(index, paragraph)
+        },
+        onNewRowAdded = { index ->
+            viewModel.addNewRow(index)
         }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
-private fun JournalContent(
+private fun JournalEntryScreenContent(
     state: JournalDetailsState,
     onBackAction: () -> Unit,
     onSaveAction: () -> Unit,
-    onJournalEntryChange: (String) -> Unit,
+    onJournalEntryChange: (index: Int, paragraph: Paragraph) -> Unit,
+    onNewRowAdded: (index: Int) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier
@@ -104,85 +116,157 @@ private fun JournalContent(
             )
         },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        content = {
-            Column(
+        content = { paddingValues ->
+            JournalPage(
                 modifier = Modifier
-                    .padding(it)
+                    .padding(paddingValues)
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        text = state.journalInfo.value.title,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                    MarkdownText(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(16.dp),
-                        markdown = state.journalInfo.value.note,
-                        color = MaterialTheme.colorScheme.onBackground,
-                    )
-                }
-                EmotionalDescription(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 60.dp, 120.dp),
-                    text = state.journalInfo.value.note,
-                    onTextChange = onJournalEntryChange
-                )
-            }
+                paragraphs = state.journalInfo.value.paragraph,
+                onJournalEntryChange = onJournalEntryChange,
+                onNewRowAdded = onNewRowAdded,
+            )
         }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Serializable
+data class Paragraph(
+    val index: String = UUID.randomUUID().toString(),
+    val type: ParagraphType,
+    val data: String,
+)
+
+@Serializable
+enum class ParagraphType {
+    TITLE,
+    BODY,
+}
+
+@Composable
+fun JournalPage(
+    modifier: Modifier = Modifier,
+    paragraphs: List<Paragraph>,
+    onJournalEntryChange: (index: Int, paragraph: Paragraph) -> Unit,
+    onNewRowAdded: (index: Int) -> Unit = {},
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp),
+    ) {
+        itemsIndexed(paragraphs, key = { _, item -> item.index }) { index, paragraph ->
+            when (paragraph.type) {
+                ParagraphType.TITLE -> {
+                    EmotionalDescription(
+                        modifier = Modifier.fillMaxWidth(),
+                        paragraph = paragraph,
+                        onTextChange = {
+                            onJournalEntryChange(index, paragraph)
+                        },
+                        onAddNewRow = {
+                            onNewRowAdded(index)
+                        }
+                    )
+                }
+
+                ParagraphType.BODY -> {
+                    EmotionalDescription(
+                        modifier = Modifier.fillMaxWidth(),
+                        paragraph = paragraph,
+                        onTextChange = {
+                            onJournalEntryChange(index, paragraph)
+                        },
+                        onAddNewRow = {
+                            onNewRowAdded(index)
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Composable
 fun EmotionalDescription(
     modifier: Modifier,
-    text: String,
-    onTextChange: (String) -> Unit
+    paragraph: Paragraph,
+    onTextChange: (Paragraph) -> Unit,
+    onAddNewRow: () -> Unit,
 ) {
-    OutlinedTextField(
+    Row(
         modifier = modifier,
-        value = text,
-        onValueChange = {
-            onTextChange(it)
-        },
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.journal_details_title_talk_about_it),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-            )
-        },
-        textStyle = MaterialTheme.typography.bodyLarge,
-        colors = OutlinedTextFieldDefaults.colors(),
-        shape = RoundedCornerShape(8.dp),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.None
-        ),
-    )
+    ) {
+        val isFocused = remember(paragraph.index) { mutableStateOf(false) }
+        AnimatedVisibility(isFocused.value) {
+            IconButton(onClick = onAddNewRow) {
+                Icon(
+                    modifier = Modifier
+                        .requiredSize(24.dp)
+                        .elementTag("addNewEntry"),
+                    tint = MaterialTheme.colorScheme.primary,
+                    imageVector = Icons.Default.AddCircle,
+                    contentDescription = stringResource(id = R.string.journal_entry_add_new_entry)
+                )
+            }
+            VerticalDivider()
+        }
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onFocusChanged {
+                    isFocused.value = it.isFocused
+                },
+            value = paragraph.data,
+            onValueChange = { text ->
+                onTextChange(paragraph.copy(data = text))
+            },
+            placeholder = {},
+            textStyle = MaterialTheme.typography.bodyLarge,
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                errorContainerColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.None
+            ),
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun JournalContentPreview() {
-    virtus.synergy.design_system.theme.MindTempusTheme {
-        JournalContent(
-            state = JournalDetailsState(),
+    MindTempusTheme {
+        val journalInfo = remember {
+            mutableStateOf(
+                JournalInfo(
+                    title = "Title",
+                    paragraph = listOf(
+                        Paragraph(
+                            type = ParagraphType.TITLE,
+                            data = "Title"
+                        ),
+                        Paragraph(
+                            type = ParagraphType.BODY,
+                            data = "Body"
+                        )
+                    ),
+                    emoji = "😊",
+                    emotionalIndex = 1
+                )
+            )
+        }
+        JournalEntryScreenContent(
+            state = JournalDetailsState(journalInfo = journalInfo),
             onBackAction = { /*TODO*/ },
             onSaveAction = {},
-            onJournalEntryChange = {},
+            onJournalEntryChange = { _, _ -> },
+            onNewRowAdded = { /*TODO*/ }
         )
     }
 }

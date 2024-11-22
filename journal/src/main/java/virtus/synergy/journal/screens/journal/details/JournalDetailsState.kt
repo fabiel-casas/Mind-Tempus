@@ -9,7 +9,7 @@ data class JournalDetailsState(
 
 data class JournalInfo(
     val title: String = "",
-    val note: String = "",
+    val paragraph: List<Paragraph> = emptyList(),
     val emoji: String = "",
     val emotionalIndex: Int? = null,
 )
