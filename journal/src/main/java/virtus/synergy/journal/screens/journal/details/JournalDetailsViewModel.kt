@@ -4,11 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import virtus.synergy.core.resultCatching
-import virtus.synergy.journal.usecases.JournalUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
+import virtus.synergy.core.resultCatching
+import virtus.synergy.journal.usecases.JournalUseCase
 
 class JournalDetailsViewModel(
     private val journalUseCase: JournalUseCase,
@@ -51,14 +50,19 @@ class JournalDetailsViewModel(
     }
 
     fun addNewRow(index: Int) {
+        val newParagraphs = journalInfo.value.paragraph
+            .map { it.copy(isFocused = false) }
+            .toMutableList()
+            .apply {
+                add(
+                    index + 1,
+                    Paragraph(type = ParagraphType.BODY, data = "", isFocused = true)
+                )
+            }
         journalInfo.apply {
             value = value.copy(
-                paragraph = value.paragraph.toMutableList().apply {
-                    add(index+1, Paragraph(type = ParagraphType.BODY, data = ""))
-                }
+                paragraph = newParagraphs
             )
         }
     }
-
-
 }
