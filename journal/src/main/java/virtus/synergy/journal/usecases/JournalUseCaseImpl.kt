@@ -1,7 +1,11 @@
 package virtus.synergy.journal.usecases
 
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import virtus.synergy.core.logError
 import virtus.synergy.core.toDayMonthYearTime
 import virtus.synergy.core.toDayOfTheWeek
 import virtus.synergy.core.toHourMinutes
@@ -9,11 +13,9 @@ import virtus.synergy.core.toMonthYear
 import virtus.synergy.journal.model.db.MindTempusDataBase
 import virtus.synergy.journal.model.tables.JournalEntryTable
 import virtus.synergy.journal.screens.journal.details.JournalInfo
-import virtus.synergy.journal.screens.journal.list.JournalItemState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import virtus.synergy.journal.screens.journal.details.Paragraph
 import virtus.synergy.journal.screens.journal.details.ParagraphType
+import virtus.synergy.journal.screens.journal.list.JournalItemState
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -90,7 +92,17 @@ class JournalUseCaseImpl(
             )
         )
     } else {
-        Gson().fromJson(note, object : TypeToken<List<Paragraph>>() {}.type)
+        try {
+            Gson().fromJson(note, object : TypeToken<List<Paragraph>>() {}.type)
+        } catch (error: JsonSyntaxException) {
+            error.logError("Error parsing journal note")
+            listOf(
+                Paragraph(
+                    type = ParagraphType.BODY,
+                    data = note
+                )
+            )
+        }
     }
 
     private fun JournalEntryTable.toState(): JournalItemState = JournalItemState(
@@ -99,6 +111,6 @@ class JournalUseCaseImpl(
         dayOfTheWeek = creationTime.toDayOfTheWeek(),
         monthYear = creationTime.toMonthYear(),
         time = creationTime.toHourMinutes(),
-        description = note
+        description = toParagraphList().firstOrNull { it.data.isNotEmpty() }?.data.orEmpty()
     )
 }
