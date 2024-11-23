@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,12 +27,14 @@ import virtus.synergy.design_system.R
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavigationTopAppBar(
+    modifier: Modifier = Modifier,
     title: String,
     onBackAction: () -> Unit,
     actions: @Composable RowScope.() -> Unit = {},
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {
             Text(
                 text = title,

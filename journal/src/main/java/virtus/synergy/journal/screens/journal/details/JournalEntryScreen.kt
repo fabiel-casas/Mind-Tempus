@@ -3,6 +3,7 @@ package virtus.synergy.journal.screens.journal.details
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -10,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -85,11 +87,12 @@ private fun JournalEntryScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .flowTag("journal")
-            .screenTag("createJournal")
-            .elementTag("createJournalEntry")
-            .trackOnDisplay(),
+            .screenTag("createJournalEntry")
+            .trackOnDisplay()
+            .imePadding(),
         topBar = {
             NavigationTopAppBar(
+                modifier = Modifier.elementTag("topBar"),
                 title = state.journalInfo.value.emoji,
                 onBackAction = onBackAction,
                 actions = {
@@ -109,6 +112,9 @@ private fun JournalEntryScreenContent(
             )
         },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
+        bottomBar = {
+            TextEditorTools()
+        },
         content = { paddingValues ->
             JournalPage(
                 modifier = Modifier
@@ -120,6 +126,52 @@ private fun JournalEntryScreenContent(
             )
         }
     )
+}
+
+@Composable
+private fun TextEditorTools() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .elementTag("bottomBar")
+    ) {
+        MTIconButton(
+            modifier = Modifier.elementTag("title"),
+            onClick = { }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Title"
+            )
+        }
+        MTIconButton(
+            modifier = Modifier.elementTag("bold"),
+            onClick = { }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "bold"
+            )
+        }
+        MTIconButton(
+            modifier = Modifier.elementTag("italic"),
+            onClick = { }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "italic"
+            )
+        }
+        MTIconButton(
+            modifier = Modifier.elementTag("alignRight"),
+            onClick = { }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "align right"
+            )
+        }
+    }
 }
 
 @Serializable
