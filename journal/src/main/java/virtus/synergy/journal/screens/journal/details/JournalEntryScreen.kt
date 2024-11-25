@@ -1,9 +1,16 @@
 package virtus.synergy.journal.screens.journal.details
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,6 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -88,8 +97,7 @@ private fun JournalEntryScreenContent(
             .fillMaxSize()
             .flowTag("journal")
             .screenTag("createJournalEntry")
-            .trackOnDisplay()
-            .imePadding(),
+            .trackOnDisplay(),
         topBar = {
             NavigationTopAppBar(
                 modifier = Modifier.elementTag("topBar"),
@@ -112,64 +120,80 @@ private fun JournalEntryScreenContent(
             )
         },
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        bottomBar = {
-            TextEditorTools()
-        },
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .exclude(WindowInsets.navigationBars)
+            .exclude(WindowInsets.ime),
         content = { paddingValues ->
-            JournalPage(
+            Column(
                 modifier = Modifier
+                    .fillMaxSize()
                     .padding(paddingValues)
-                    .fillMaxSize(),
-                paragraphs = state.journalInfo.value.paragraph,
-                onJournalEntryChange = onJournalEntryChange,
-                onNewRowAdded = onNewRowAdded,
-            )
+            ) {
+                Box(modifier = Modifier.weight(1f)) {
+                    JournalPage(
+                        modifier = Modifier,
+                        paragraphs = state.journalInfo.value.paragraph,
+                        onJournalEntryChange = onJournalEntryChange,
+                        onNewRowAdded = onNewRowAdded,
+                    )
+                }
+                TextEditorTools(
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .imePadding()
+                )
+            }
         }
     )
 }
 
 @Composable
-private fun TextEditorTools() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .elementTag("bottomBar")
-    ) {
-        MTIconButton(
-            modifier = Modifier.elementTag("title"),
-            onClick = { }
+private fun TextEditorTools(
+    modifier: Modifier
+) {
+    Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .elementTag("bottomBar")
         ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "Title"
-            )
-        }
-        MTIconButton(
-            modifier = Modifier.elementTag("bold"),
-            onClick = { }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "bold"
-            )
-        }
-        MTIconButton(
-            modifier = Modifier.elementTag("italic"),
-            onClick = { }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "italic"
-            )
-        }
-        MTIconButton(
-            modifier = Modifier.elementTag("alignRight"),
-            onClick = { }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Edit,
-                contentDescription = "align right"
-            )
+            MTIconButton(
+                modifier = Modifier.elementTag("title"),
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "Title"
+                )
+            }
+            MTIconButton(
+                modifier = Modifier.elementTag("bold"),
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "bold"
+                )
+            }
+            MTIconButton(
+                modifier = Modifier.elementTag("italic"),
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "italic"
+                )
+            }
+            MTIconButton(
+                modifier = Modifier.elementTag("alignRight"),
+                onClick = { }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = "align right"
+                )
+            }
         }
     }
 }
