@@ -13,18 +13,20 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -35,13 +37,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 import virtus.synergy.analytics.ui.elementTag
 import virtus.synergy.analytics.ui.flowTag
@@ -51,7 +53,6 @@ import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.MTIconButton
 import virtus.synergy.design_system.components.NavigationTopAppBar
 import virtus.synergy.design_system.theme.MindTempusTheme
-import java.util.UUID
 
 /**
  *
@@ -79,6 +80,9 @@ fun JournalEntryScreen(
         },
         onNewRowAdded = { index ->
             viewModel.addNewRow(index)
+        },
+        onJournalToolAction = { tool ->
+            viewModel.updateSelectedParagraph(tool)
         }
     )
 }
@@ -91,6 +95,7 @@ private fun JournalEntryScreenContent(
     onSaveAction: () -> Unit,
     onJournalEntryChange: (index: Int, paragraph: Paragraph) -> Unit,
     onNewRowAdded: (index: Int) -> Unit,
+    onJournalToolAction: (JournalParagraphTools) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier
@@ -141,7 +146,8 @@ private fun JournalEntryScreenContent(
                 TextEditorTools(
                     modifier = Modifier
                         .navigationBarsPadding()
-                        .imePadding()
+                        .imePadding(),
+                    onToolAction = onJournalToolAction
                 )
             }
         }
@@ -150,66 +156,28 @@ private fun JournalEntryScreenContent(
 
 @Composable
 private fun TextEditorTools(
-    modifier: Modifier
+    modifier: Modifier,
+    onToolAction: (JournalParagraphTools) -> Unit,
 ) {
     Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
-        Row(
+        LazyRow(
             modifier = modifier
                 .fillMaxWidth()
                 .elementTag("bottomBar")
         ) {
-            MTIconButton(
-                modifier = Modifier.elementTag("title"),
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Title"
-                )
-            }
-            MTIconButton(
-                modifier = Modifier.elementTag("bold"),
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "bold"
-                )
-            }
-            MTIconButton(
-                modifier = Modifier.elementTag("italic"),
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "italic"
-                )
-            }
-            MTIconButton(
-                modifier = Modifier.elementTag("alignRight"),
-                onClick = { }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "align right"
-                )
+            items(journalTools) { tool ->
+                MTIconButton(
+                    modifier = Modifier.elementTag(tool.title),
+                    onClick = { onToolAction(tool) }
+                ) {
+                    Text(
+                        text = tool.title,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
         }
     }
-}
-
-@Serializable
-data class Paragraph(
-    val index: String = UUID.randomUUID().toString(),
-    val type: ParagraphType,
-    val data: String,
-    val isFocused: Boolean = false,
-)
-
-@Serializable
-enum class ParagraphType {
-    TITLE,
-    BODY,
 }
 
 @Composable
@@ -223,33 +191,16 @@ fun JournalPage(
         modifier = modifier.padding(horizontal = 8.dp),
     ) {
         itemsIndexed(paragraphs, key = { _, item -> item.index }) { index, paragraph ->
-            when (paragraph.type) {
-                ParagraphType.TITLE -> {
-                    EmotionalDescription(
-                        modifier = Modifier.fillMaxWidth(),
-                        paragraph = paragraph,
-                        onTextChange = { newParagraph ->
-                            onJournalEntryChange(index, newParagraph)
-                        },
-                        onAddNewRow = {
-                            onNewRowAdded(index)
-                        }
-                    )
+            EmotionalDescription(
+                modifier = Modifier.fillMaxWidth(),
+                paragraph = paragraph,
+                onParagraphChange = { newParagraph ->
+                    onJournalEntryChange(index, newParagraph)
+                },
+                onAddNewRow = {
+                    onNewRowAdded(index)
                 }
-
-                ParagraphType.BODY -> {
-                    EmotionalDescription(
-                        modifier = Modifier.fillMaxWidth(),
-                        paragraph = paragraph,
-                        onTextChange = { newParagraph ->
-                            onJournalEntryChange(index, newParagraph)
-                        },
-                        onAddNewRow = {
-                            onNewRowAdded(index)
-                        }
-                    )
-                }
-            }
+            )
         }
     }
 }
@@ -258,7 +209,7 @@ fun JournalPage(
 fun EmotionalDescription(
     modifier: Modifier,
     paragraph: Paragraph,
-    onTextChange: (Paragraph) -> Unit,
+    onParagraphChange: (Paragraph) -> Unit,
     onAddNewRow: () -> Unit,
 ) {
     Row(
@@ -270,16 +221,24 @@ fun EmotionalDescription(
                 focusRequester.requestFocus()
             }
         }
+        val textStyle = if (paragraph.isTitle) {
+            MaterialTheme.typography.titleLarge
+        } else {
+            MaterialTheme.typography.bodyLarge
+        }
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .onFocusChanged { focusState ->
+                    onParagraphChange(paragraph.copy(isFocused = focusState.isFocused))
+                },
             value = paragraph.data,
             onValueChange = { text ->
-                onTextChange(paragraph.copy(data = text))
+                onParagraphChange(paragraph.copy(data = text))
             },
             placeholder = {},
-            textStyle = MaterialTheme.typography.bodyLarge,
+            textStyle = textStyle,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 disabledContainerColor = Color.Transparent,
@@ -312,11 +271,10 @@ private fun JournalContentPreview() {
                     title = "Title",
                     paragraph = listOf(
                         Paragraph(
-                            type = ParagraphType.TITLE,
+                            isTitle = true,
                             data = "Title"
                         ),
                         Paragraph(
-                            type = ParagraphType.BODY,
                             data = "Body"
                         )
                     ),
@@ -330,7 +288,8 @@ private fun JournalContentPreview() {
             onBackAction = { /*TODO*/ },
             onSaveAction = {},
             onJournalEntryChange = { _, _ -> },
-            onNewRowAdded = { /*TODO*/ }
+            onNewRowAdded = { /*TODO*/ },
+            onJournalToolAction = { _ -> /*TODO*/ }
         )
     }
 }

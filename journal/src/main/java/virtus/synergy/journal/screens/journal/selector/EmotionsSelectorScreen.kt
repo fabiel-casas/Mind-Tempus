@@ -2,6 +2,7 @@ package virtus.synergy.journal.screens.journal.selector
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,6 +22,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -110,6 +113,8 @@ fun EmotionsSelectorContent(
             val slideValue = remember(state.emotionalLevel.value) {
                 mutableStateOf(state.emotionalLevel.value)
             }
+            val interactionSource: MutableInteractionSource =
+                remember { MutableInteractionSource() }
             Slider(
                 value = slideValue.value,
                 onValueChange = {
@@ -118,6 +123,13 @@ fun EmotionsSelectorContent(
                 valueRange = 1f..5f,
                 onValueChangeFinished = {
                     onEmotionLevelChange(slideValue.value)
+                },
+                interactionSource = interactionSource,
+                thumb = {
+                    SliderDefaults.Thumb(
+                        interactionSource = interactionSource,
+                        modifier = Modifier.size(24.dp),
+                    )
                 },
                 steps = 3
             )

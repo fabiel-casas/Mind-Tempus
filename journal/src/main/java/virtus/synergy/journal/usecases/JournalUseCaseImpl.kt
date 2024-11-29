@@ -14,7 +14,6 @@ import virtus.synergy.journal.model.db.MindTempusDataBase
 import virtus.synergy.journal.model.tables.JournalEntryTable
 import virtus.synergy.journal.screens.journal.details.JournalInfo
 import virtus.synergy.journal.screens.journal.details.Paragraph
-import virtus.synergy.journal.screens.journal.details.ParagraphType
 import virtus.synergy.journal.screens.journal.list.JournalItemState
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -87,8 +86,8 @@ class JournalUseCaseImpl(
     private fun JournalEntryTable.toParagraphList(): List<Paragraph> = if (note.isEmpty()) {
         listOf(
             Paragraph(
-                type = ParagraphType.TITLE,
-                data = ""
+                data = "",
+                isTitle = true,
             )
         )
     } else {
@@ -98,7 +97,6 @@ class JournalUseCaseImpl(
             error.logError("Error parsing journal note")
             listOf(
                 Paragraph(
-                    type = ParagraphType.BODY,
                     data = note
                 )
             )

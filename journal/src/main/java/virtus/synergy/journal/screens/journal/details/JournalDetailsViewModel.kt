@@ -56,7 +56,7 @@ class JournalDetailsViewModel(
             .apply {
                 add(
                     index + 1,
-                    Paragraph(type = ParagraphType.BODY, data = "", isFocused = true)
+                    Paragraph(data = "", isFocused = true)
                 )
             }
         journalInfo.apply {
@@ -64,5 +64,37 @@ class JournalDetailsViewModel(
                 paragraph = newParagraphs
             )
         }
+    }
+
+    fun updateSelectedParagraph(journalParagraphTools: JournalParagraphTools) {
+        journalInfo.value.paragraph
+            .firstOrNull { it.isFocused }
+            ?.let { paragraph ->
+                when (journalParagraphTools) {
+                    JournalParagraphTools.Bold -> makeTextBold(paragraph)
+                    JournalParagraphTools.Italic -> makeTextItalic(paragraph)
+                    JournalParagraphTools.Title -> makeTextTitle(paragraph)
+                }
+            }
+    }
+
+    private fun makeTextTitle(titleParagraph: Paragraph) {
+        journalInfo.apply {
+            value = value.copy(
+                paragraph = value.paragraph.map { paragraph ->
+                    if (paragraph.index == titleParagraph.index) {
+                        paragraph.copy(isTitle = !paragraph.isTitle)
+                    } else {
+                        paragraph
+                    }
+                }
+            )
+        }
+    }
+
+    private fun makeTextItalic(paragraph: Paragraph) {
+    }
+
+    private fun makeTextBold(paragraph: Paragraph) {
     }
 }
