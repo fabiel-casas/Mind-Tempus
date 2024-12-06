@@ -10,6 +10,7 @@ import java.util.UUID
 
 data class JournalDetailsState(
     val journalInfo: State<JournalInfo> = mutableStateOf(JournalInfo()),
+    val paragraphTools: State<List<JournalParagraphTools>> = mutableStateOf(emptyList()),
 )
 
 data class JournalInfo(
@@ -33,6 +34,7 @@ sealed class JournalParagraphTools(
     @DrawableRes val icon: Int,
     @StringRes val title: Int,
     var isSelected: Boolean = false,
+    var isVisible: Boolean = true,
 ) {
     object Title : JournalParagraphTools(
         icon = R.drawable.ic_text_formatting_title,

@@ -1,6 +1,7 @@
 package virtus.synergy.journal.screens.journal.details
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.TextRange
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
@@ -14,8 +15,10 @@ class JournalDetailsViewModel(
 ) : ViewModel() {
 
     private val journalInfo = mutableStateOf(JournalInfo())
+    private val paragraphTools = mutableStateOf(journalTools)
     val state = JournalDetailsState(
         journalInfo = journalInfo,
+        paragraphTools = paragraphTools,
     )
     private var journalId: String = ""
 
@@ -30,7 +33,7 @@ class JournalDetailsViewModel(
         }
     }
 
-    fun updateEmotionalDescription(index: Int, newParagraph: Paragraph) {
+    fun onParagraphContentUpdated(newParagraph: Paragraph, cursorSelection: TextRange) {
         journalInfo.apply {
             value = value.copy(
                 paragraph = value.paragraph.map { paragraph ->
@@ -38,9 +41,10 @@ class JournalDetailsViewModel(
                 }
             )
         }
+        onParagraphSelectionChanged(newParagraph, cursorSelection)
     }
 
-    fun updateJournalNotes() {
+    fun onSaveJournalNotes() {
         viewModelScope.launch(Dispatchers.IO) {
             journalUseCase.updateJournalNote(
                 journalId = journalId,
@@ -49,7 +53,7 @@ class JournalDetailsViewModel(
         }
     }
 
-    fun addNewRow(index: Int) {
+    fun onAddNewRow(index: Int) {
         val newParagraphs = journalInfo.value.paragraph
             .map { it.copy(isFocused = false) }
             .toMutableList()
@@ -66,14 +70,17 @@ class JournalDetailsViewModel(
         }
     }
 
-    fun updateSelectedParagraph(journalParagraphTools: JournalParagraphTools) {
+    fun onToolActionSelected(journalParagraphTools: JournalParagraphTools) {
         journalInfo.value.paragraph
             .firstOrNull { it.isFocused }
             ?.let { paragraph ->
                 when (journalParagraphTools) {
                     JournalParagraphTools.Bold -> makeTextBold(paragraph)
                     JournalParagraphTools.Italic -> makeTextItalic(paragraph)
-                    JournalParagraphTools.Title -> makeTextTitle(paragraph)
+                    JournalParagraphTools.Title -> {
+                        journalParagraphTools.isSelected = !paragraph.isTitle
+                        makeTextTitle(paragraph)
+                    }
                 }
             }
     }
@@ -96,5 +103,19 @@ class JournalDetailsViewModel(
     }
 
     private fun makeTextBold(paragraph: Paragraph) {
+    }
+
+    private fun onParagraphSelectionChanged(
+        newSelectedParagraph: Paragraph,
+        cursorSelection: TextRange
+    ) {
+        paragraphTools.value = paragraphTools.value.map { tool ->
+            when (tool) {
+                JournalParagraphTools.Bold -> tool.isSelected = newSelectedParagraph.isBold
+                JournalParagraphTools.Italic -> tool.isSelected = newSelectedParagraph.isItalic
+                JournalParagraphTools.Title -> tool.isSelected = newSelectedParagraph.isTitle
+            }
+            tool
+        }
     }
 }

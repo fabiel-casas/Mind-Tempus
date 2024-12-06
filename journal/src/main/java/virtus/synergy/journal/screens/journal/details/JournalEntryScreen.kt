@@ -31,8 +31,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -75,18 +77,12 @@ fun JournalEntryScreen(
         state = state,
         onBackAction = onBackAction,
         onSaveAction = {
-            viewModel.updateJournalNotes()
+            viewModel.onSaveJournalNotes()
             onBackAction()
         },
-        onJournalEntryChange = { index, paragraph ->
-            viewModel.updateEmotionalDescription(index, paragraph)
-        },
-        onNewRowAdded = { index ->
-            viewModel.addNewRow(index)
-        },
-        onJournalToolAction = { tool ->
-            viewModel.updateSelectedParagraph(tool)
-        }
+        onJournalEntryChanged = viewModel::onParagraphContentUpdated,
+        onNewRowAdded = viewModel::onAddNewRow,
+        onJournalToolAction = viewModel::onToolActionSelected
     )
 }
 
@@ -96,7 +92,7 @@ private fun JournalEntryScreenContent(
     state: JournalDetailsState,
     onBackAction: () -> Unit,
     onSaveAction: () -> Unit,
-    onJournalEntryChange: (index: Int, paragraph: Paragraph) -> Unit,
+    onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit,
     onJournalToolAction: (JournalParagraphTools) -> Unit,
 ) {
@@ -142,7 +138,7 @@ private fun JournalEntryScreenContent(
                     JournalPage(
                         modifier = Modifier,
                         paragraphs = state.journalInfo.value.paragraph,
-                        onJournalEntryChange = onJournalEntryChange,
+                        onJournalEntryChanged = onJournalEntryChanged,
                         onNewRowAdded = onNewRowAdded,
                     )
                 }
@@ -150,6 +146,7 @@ private fun JournalEntryScreenContent(
                     modifier = Modifier
                         .navigationBarsPadding()
                         .imePadding(),
+                    journalTools = state.paragraphTools.value,
                     onToolAction = onJournalToolAction
                 )
             }
@@ -160,6 +157,7 @@ private fun JournalEntryScreenContent(
 @Composable
 private fun TextEditorTools(
     modifier: Modifier,
+    journalTools: List<JournalParagraphTools>,
     onToolAction: (JournalParagraphTools) -> Unit,
 ) {
     Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
@@ -170,7 +168,12 @@ private fun TextEditorTools(
         ) {
             items(journalTools) { tool ->
                 val contentDescription = stringResource(id = tool.title)
-                Surface {
+                val isToolSelected = if (tool.isSelected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.surface
+                }
+                Surface(color = isToolSelected) {
                     MTIconButton(
                         modifier = Modifier.elementTag(contentDescription),
                         onClick = { onToolAction(tool) }
@@ -190,7 +193,7 @@ private fun TextEditorTools(
 fun JournalPage(
     modifier: Modifier = Modifier,
     paragraphs: List<Paragraph>,
-    onJournalEntryChange: (index: Int, paragraph: Paragraph) -> Unit,
+    onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit = {},
 ) {
     LazyColumn(
@@ -200,9 +203,7 @@ fun JournalPage(
             EmotionalDescription(
                 modifier = Modifier.fillMaxWidth(),
                 paragraph = paragraph,
-                onParagraphChange = { newParagraph ->
-                    onJournalEntryChange(index, newParagraph)
-                },
+                onParagraphChanged = onJournalEntryChanged,
                 onAddNewRow = {
                     onNewRowAdded(index)
                 }
@@ -215,7 +216,7 @@ fun JournalPage(
 fun EmotionalDescription(
     modifier: Modifier,
     paragraph: Paragraph,
-    onParagraphChange: (Paragraph) -> Unit,
+    onParagraphChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onAddNewRow: () -> Unit,
 ) {
     Row(
@@ -232,7 +233,7 @@ fun EmotionalDescription(
         } else {
             MaterialTheme.typography.bodyLarge
         }
-        val textField = remember {
+        var textField by remember {
             mutableStateOf(
                 TextFieldValue(
                     annotatedString = AnnotatedString(paragraph.data),
@@ -245,12 +246,18 @@ fun EmotionalDescription(
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
-                    onParagraphChange(paragraph.copy(isFocused = focusState.isFocused))
+                    onParagraphChanged(
+                        paragraph.copy(isFocused = focusState.isFocused),
+                        textField.selection
+                    )
                 },
-            value = textField.value,
+            value = textField,
             onValueChange = { text ->
-                textField.value = text
-                onParagraphChange(paragraph.copy(data = text.text))
+                textField = text
+                onParagraphChanged(
+                    paragraph.copy(data = text.text, isFocused = true),
+                    textField.selection
+                )
             },
             placeholder = {},
             textStyle = textStyle,
@@ -305,7 +312,7 @@ private fun JournalContentPreview() {
             state = JournalDetailsState(journalInfo = journalInfo),
             onBackAction = { /*TODO*/ },
             onSaveAction = {},
-            onJournalEntryChange = { _, _ -> },
+            onJournalEntryChanged = { _, _ -> },
             onNewRowAdded = { /*TODO*/ },
             onJournalToolAction = { _ -> /*TODO*/ }
         )
