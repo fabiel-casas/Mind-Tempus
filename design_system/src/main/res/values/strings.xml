@@ -30,4 +30,9 @@
     <string name="close_screen">Close screen</string>
     <string name="mindTempus_journal_title">Journal</string>
     <string name="mindTempus_widgets_title">Country Widget</string>
+
+    <!--  Text tools  -->
+    <string name="tools_text_formating_title">Title</string>
+    <string name="tools_text_formating_bold">Bold</string>
+    <string name="tools_text_formating_italic">Italic</string>
 </resources>

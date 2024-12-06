@@ -1,7 +1,5 @@
 package virtus.synergy.mindtempus.navigation
 
-import virtus.synergy.design_system.R
-
 
 sealed class NavDestination(
     val route: String
@@ -13,16 +11,6 @@ sealed class NavDestination(
     companion object {
         fun navigationList() = listOf(EmotionalList)
     }
-}
-
-fun NavDestination.bottomName(): Int? = when (this) {
-    NavDestination.EmotionalList -> R.string.bottom_bar_journal_entries
-    else -> null
-}
-
-fun NavDestination.bottomIcon(): Int? = when (this) {
-    NavDestination.EmotionalList -> R.drawable.ic_home
-    else -> null
 }
 
 fun NavDestination.withPathParameters(vararg params: String): String {

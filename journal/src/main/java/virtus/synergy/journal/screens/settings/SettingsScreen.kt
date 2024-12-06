@@ -154,7 +154,6 @@ fun SettingContent(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ButtonItemComponent(
     modifier: Modifier,
@@ -170,9 +169,9 @@ private fun ButtonItemComponent(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_timer),
+            painter = painterResource(id = R.drawable.ic_time_stopwatch),
             contentDescription = null,
-            modifier = Modifier.requiredSize(32.dp),
+            modifier = Modifier.requiredSize(24.dp),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -207,9 +206,9 @@ private fun SwitchComponent(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_circle_notifications),
+            painter = painterResource(id = R.drawable.ic_notification_alarm_bell),
             contentDescription = null,
-            modifier = Modifier.requiredSize(32.dp),
+            modifier = Modifier.requiredSize(24.dp),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
         )
         Spacer(modifier = Modifier.width(8.dp))

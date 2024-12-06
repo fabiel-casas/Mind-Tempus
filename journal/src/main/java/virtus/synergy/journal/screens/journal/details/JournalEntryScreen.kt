@@ -26,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,6 +38,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -166,14 +166,17 @@ private fun TextEditorTools(
                 .elementTag("bottomBar")
         ) {
             items(journalTools) { tool ->
-                MTIconButton(
-                    modifier = Modifier.elementTag(tool.title),
-                    onClick = { onToolAction(tool) }
-                ) {
-                    Text(
-                        text = tool.title,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                val contentDescription = stringResource(id = tool.title)
+                Surface {
+                    MTIconButton(
+                        modifier = Modifier.elementTag(contentDescription),
+                        onClick = { onToolAction(tool) }
+                    ) {
+                        Icon(
+                            painter = painterResource(tool.icon),
+                            contentDescription = contentDescription
+                        )
+                    }
                 }
             }
         }
