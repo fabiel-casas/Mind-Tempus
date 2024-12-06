@@ -40,8 +40,11 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
@@ -229,6 +232,14 @@ fun EmotionalDescription(
         } else {
             MaterialTheme.typography.bodyLarge
         }
+        val textField = remember {
+            mutableStateOf(
+                TextFieldValue(
+                    annotatedString = AnnotatedString(paragraph.data),
+                    selection = TextRange(paragraph.data.length)
+                )
+            )
+        }
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -236,21 +247,14 @@ fun EmotionalDescription(
                 .onFocusChanged { focusState ->
                     onParagraphChange(paragraph.copy(isFocused = focusState.isFocused))
                 },
-            value = paragraph.data,
+            value = textField.value,
             onValueChange = { text ->
-                onParagraphChange(paragraph.copy(data = text))
+                textField.value = text
+                onParagraphChange(paragraph.copy(data = text.text))
             },
             placeholder = {},
             textStyle = textStyle,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-                errorContainerColor = Color.Transparent,
-                focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-            ),
+            colors = TextFieldDefaults.paragraphInputColors(),
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Go
@@ -263,6 +267,17 @@ fun EmotionalDescription(
         )
     }
 }
+
+@Composable
+private fun TextFieldDefaults.paragraphInputColors() = colors(
+    focusedContainerColor = Color.Transparent,
+    disabledContainerColor = Color.Transparent,
+    unfocusedContainerColor = Color.Transparent,
+    errorContainerColor = Color.Transparent,
+    focusedIndicatorColor = Color.Transparent,
+    disabledIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+)
 
 @PreviewScreenSizes
 @Composable
