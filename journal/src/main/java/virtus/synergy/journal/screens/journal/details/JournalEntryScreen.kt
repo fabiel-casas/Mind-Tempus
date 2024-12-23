@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,7 +37,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
@@ -58,6 +54,7 @@ import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.MTIconButton
 import virtus.synergy.design_system.components.NavigationTopAppBar
 import virtus.synergy.design_system.theme.MindTempusTheme
+import virtus.synergy.journal.ui.TextEditorTools
 
 /**
  *
@@ -81,6 +78,7 @@ fun JournalEntryScreen(
             onBackAction()
         },
         onJournalEntryChanged = viewModel::onParagraphContentUpdated,
+        onParagraphFocusChanged = viewModel::onParagraphFocusChanged,
         onNewRowAdded = viewModel::onAddNewRow,
         onJournalToolAction = viewModel::onToolActionSelected
     )
@@ -93,6 +91,7 @@ private fun JournalEntryScreenContent(
     onBackAction: () -> Unit,
     onSaveAction: () -> Unit,
     onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
+    onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit,
     onJournalToolAction: (JournalParagraphToolsState) -> Unit,
 ) {
@@ -139,6 +138,7 @@ private fun JournalEntryScreenContent(
                         modifier = Modifier,
                         paragraphs = state.journalInfo.value.paragraph,
                         onJournalEntryChanged = onJournalEntryChanged,
+                        onParagraphFocusChanged = onParagraphFocusChanged,
                         onNewRowAdded = onNewRowAdded,
                     )
                 }
@@ -155,45 +155,11 @@ private fun JournalEntryScreenContent(
 }
 
 @Composable
-private fun TextEditorTools(
-    modifier: Modifier,
-    journalToolsState: List<JournalParagraphToolsState>,
-    onToolAction: (JournalParagraphToolsState) -> Unit,
-) {
-    Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
-        LazyRow(
-            modifier = modifier
-                .fillMaxWidth()
-                .elementTag("bottomBar")
-        ) {
-            items(journalToolsState) { toolState ->
-                val contentDescription = stringResource(id = toolState.type.title)
-                val isToolSelected = if (toolState.isSelected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.surface
-                }
-                Surface(color = isToolSelected) {
-                    MTIconButton(
-                        modifier = Modifier.elementTag(contentDescription),
-                        onClick = { onToolAction(toolState) }
-                    ) {
-                        Icon(
-                            painter = painterResource(toolState.type.icon),
-                            contentDescription = contentDescription
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun JournalPage(
     modifier: Modifier = Modifier,
     paragraphs: List<Paragraph>,
     onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
+    onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit = {},
 ) {
     LazyColumn(
@@ -204,6 +170,7 @@ fun JournalPage(
                 modifier = Modifier.fillMaxWidth(),
                 paragraph = paragraph,
                 onParagraphChanged = onJournalEntryChanged,
+                onParagraphFocusChanged = onParagraphFocusChanged,
                 onAddNewRow = {
                     onNewRowAdded(index)
                 }
@@ -217,6 +184,7 @@ fun EmotionalDescription(
     modifier: Modifier,
     paragraph: Paragraph,
     onParagraphChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
+    onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onAddNewRow: () -> Unit,
 ) {
     Row(
@@ -246,7 +214,7 @@ fun EmotionalDescription(
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
                 .onFocusChanged { focusState ->
-                    onParagraphChanged(
+                    onParagraphFocusChanged(
                         paragraph.copy(isFocused = focusState.isFocused),
                         textField.selection
                     )
@@ -314,7 +282,8 @@ private fun JournalContentPreview() {
             onSaveAction = {},
             onJournalEntryChanged = { _, _ -> },
             onNewRowAdded = { /*TODO*/ },
-            onJournalToolAction = { _ -> /*TODO*/ }
+            onJournalToolAction = { _ -> /*TODO*/ },
+            onParagraphFocusChanged = { _, _ -> /*TODO*/ },
         )
     }
 }

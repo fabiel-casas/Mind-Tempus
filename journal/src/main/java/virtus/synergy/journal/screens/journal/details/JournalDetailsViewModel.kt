@@ -41,7 +41,6 @@ class JournalDetailsViewModel(
                 }
             )
         }
-        onParagraphSelectionChanged(newParagraph, cursorSelection)
     }
 
     fun onSaveJournalNotes() {
@@ -105,7 +104,7 @@ class JournalDetailsViewModel(
     private fun makeTextBold(paragraph: Paragraph) {
     }
 
-    private fun onParagraphSelectionChanged(
+    fun onParagraphFocusChanged(
         newSelectedParagraph: Paragraph,
         cursorSelection: TextRange
     ) {

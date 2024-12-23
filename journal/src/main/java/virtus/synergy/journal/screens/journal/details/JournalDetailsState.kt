@@ -33,8 +33,6 @@ data class Paragraph(
 sealed class JournalParagraphTools(
     @DrawableRes val icon: Int,
     @StringRes val title: Int,
-    var isSelected: Boolean = false,
-    var isVisible: Boolean = true,
 ) {
     object Title : JournalParagraphTools(
         icon = R.drawable.ic_text_formatting_title,
