@@ -10,7 +10,7 @@ import java.util.UUID
 
 data class JournalDetailsState(
     val journalInfo: State<JournalInfo> = mutableStateOf(JournalInfo()),
-    val paragraphTools: State<List<JournalParagraphTools>> = mutableStateOf(emptyList()),
+    val paragraphTools: State<List<JournalParagraphToolsState>> = mutableStateOf(emptyList()),
 )
 
 data class JournalInfo(
@@ -52,8 +52,14 @@ sealed class JournalParagraphTools(
     )
 }
 
+data class JournalParagraphToolsState(
+    val type: JournalParagraphTools,
+    val isSelected: Boolean = false,
+    val isVisible: Boolean = true,
+)
+
 val journalTools = listOf(
-    JournalParagraphTools.Title,
-    JournalParagraphTools.Bold,
-    JournalParagraphTools.Italic,
+    JournalParagraphToolsState(JournalParagraphTools.Title),
+    JournalParagraphToolsState(JournalParagraphTools.Bold),
+    JournalParagraphToolsState(JournalParagraphTools.Italic),
 )

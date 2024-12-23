@@ -94,7 +94,7 @@ private fun JournalEntryScreenContent(
     onSaveAction: () -> Unit,
     onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit,
-    onJournalToolAction: (JournalParagraphTools) -> Unit,
+    onJournalToolAction: (JournalParagraphToolsState) -> Unit,
 ) {
     Scaffold(
         modifier = Modifier
@@ -146,7 +146,7 @@ private fun JournalEntryScreenContent(
                     modifier = Modifier
                         .navigationBarsPadding()
                         .imePadding(),
-                    journalTools = state.paragraphTools.value,
+                    journalToolsState = state.paragraphTools.value,
                     onToolAction = onJournalToolAction
                 )
             }
@@ -157,8 +157,8 @@ private fun JournalEntryScreenContent(
 @Composable
 private fun TextEditorTools(
     modifier: Modifier,
-    journalTools: List<JournalParagraphTools>,
-    onToolAction: (JournalParagraphTools) -> Unit,
+    journalToolsState: List<JournalParagraphToolsState>,
+    onToolAction: (JournalParagraphToolsState) -> Unit,
 ) {
     Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
         LazyRow(
@@ -166,9 +166,9 @@ private fun TextEditorTools(
                 .fillMaxWidth()
                 .elementTag("bottomBar")
         ) {
-            items(journalTools) { tool ->
-                val contentDescription = stringResource(id = tool.title)
-                val isToolSelected = if (tool.isSelected) {
+            items(journalToolsState) { toolState ->
+                val contentDescription = stringResource(id = toolState.type.title)
+                val isToolSelected = if (toolState.isSelected) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.surface
@@ -176,10 +176,10 @@ private fun TextEditorTools(
                 Surface(color = isToolSelected) {
                     MTIconButton(
                         modifier = Modifier.elementTag(contentDescription),
-                        onClick = { onToolAction(tool) }
+                        onClick = { onToolAction(toolState) }
                     ) {
                         Icon(
-                            painter = painterResource(tool.icon),
+                            painter = painterResource(toolState.type.icon),
                             contentDescription = contentDescription
                         )
                     }

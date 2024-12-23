@@ -70,18 +70,18 @@ class JournalDetailsViewModel(
         }
     }
 
-    fun onToolActionSelected(journalParagraphTools: JournalParagraphTools) {
+    fun onToolActionSelected(journalParagraphTools: JournalParagraphToolsState) {
         journalInfo.value.paragraph
             .firstOrNull { it.isFocused }
             ?.let { paragraph ->
-                when (journalParagraphTools) {
+                when (journalParagraphTools.type) {
                     JournalParagraphTools.Bold -> makeTextBold(paragraph)
                     JournalParagraphTools.Italic -> makeTextItalic(paragraph)
                     JournalParagraphTools.Title -> {
-                        journalParagraphTools.isSelected = !paragraph.isTitle
                         makeTextTitle(paragraph)
                     }
                 }
+                highlightToolsBaseOnParagraph(paragraph)
             }
     }
 
@@ -109,13 +109,16 @@ class JournalDetailsViewModel(
         newSelectedParagraph: Paragraph,
         cursorSelection: TextRange
     ) {
+        highlightToolsBaseOnParagraph(newSelectedParagraph)
+    }
+
+    private fun highlightToolsBaseOnParagraph(newSelectedParagraph: Paragraph) {
         paragraphTools.value = paragraphTools.value.map { tool ->
-            when (tool) {
-                JournalParagraphTools.Bold -> tool.isSelected = newSelectedParagraph.isBold
-                JournalParagraphTools.Italic -> tool.isSelected = newSelectedParagraph.isItalic
-                JournalParagraphTools.Title -> tool.isSelected = newSelectedParagraph.isTitle
+            when (tool.type) {
+                JournalParagraphTools.Bold -> tool.copy(isSelected = newSelectedParagraph.isBold)
+                JournalParagraphTools.Italic -> tool.copy(isSelected = newSelectedParagraph.isItalic)
+                JournalParagraphTools.Title -> tool.copy(isSelected = newSelectedParagraph.isTitle)
             }
-            tool
         }
     }
 }
