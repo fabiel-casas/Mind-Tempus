@@ -8,9 +8,6 @@ sealed class NavDestination(
     object EmotionalList : NavDestination("emotionalList")
     object SettingScreen : NavDestination("settingScreen")
     object EmotionalSelector : NavDestination("emotionalSelector")
-    companion object {
-        fun navigationList() = listOf(EmotionalList)
-    }
 }
 
 fun NavDestination.withPathParameters(vararg params: String): String {

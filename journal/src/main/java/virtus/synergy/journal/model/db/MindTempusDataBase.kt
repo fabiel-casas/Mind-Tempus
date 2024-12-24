@@ -11,7 +11,7 @@ import virtus.synergy.journal.model.tables.JournalEntryTable
     entities = [
         JournalEntryTable::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 @TypeConverters(ZonedDateTimeTypeConverter::class)

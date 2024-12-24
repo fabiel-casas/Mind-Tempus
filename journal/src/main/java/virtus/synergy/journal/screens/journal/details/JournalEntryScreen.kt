@@ -2,7 +2,6 @@ package virtus.synergy.journal.screens.journal.details
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +13,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,25 +20,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -54,6 +40,7 @@ import virtus.synergy.design_system.R
 import virtus.synergy.design_system.components.MTIconButton
 import virtus.synergy.design_system.components.NavigationTopAppBar
 import virtus.synergy.design_system.theme.MindTempusTheme
+import virtus.synergy.journal.ui.PageRowInput
 import virtus.synergy.journal.ui.TextEditorTools
 
 /**
@@ -77,7 +64,7 @@ fun JournalEntryScreen(
             viewModel.onSaveJournalNotes()
             onBackAction()
         },
-        onJournalEntryChanged = viewModel::onParagraphContentUpdated,
+        onJournalEntryChanged = viewModel::onParagraphTextChanged,
         onParagraphFocusChanged = viewModel::onParagraphFocusChanged,
         onNewRowAdded = viewModel::onAddNewRow,
         onJournalToolAction = viewModel::onToolActionSelected
@@ -90,7 +77,7 @@ private fun JournalEntryScreenContent(
     state: JournalDetailsState,
     onBackAction: () -> Unit,
     onSaveAction: () -> Unit,
-    onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
+    onJournalEntryChanged: (paragraph: Paragraph, textField: TextFieldValue) -> Unit,
     onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit,
     onJournalToolAction: (JournalParagraphToolsState) -> Unit,
@@ -137,7 +124,7 @@ private fun JournalEntryScreenContent(
                     JournalPage(
                         modifier = Modifier,
                         paragraphs = state.journalInfo.value.paragraph,
-                        onJournalEntryChanged = onJournalEntryChanged,
+                        onJournalEntryTextChanged = onJournalEntryChanged,
                         onParagraphFocusChanged = onParagraphFocusChanged,
                         onNewRowAdded = onNewRowAdded,
                     )
@@ -158,7 +145,7 @@ private fun JournalEntryScreenContent(
 fun JournalPage(
     modifier: Modifier = Modifier,
     paragraphs: List<Paragraph>,
-    onJournalEntryChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
+    onJournalEntryTextChanged: (paragraph: Paragraph, textField: TextFieldValue) -> Unit,
     onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
     onNewRowAdded: (index: Int) -> Unit = {},
 ) {
@@ -166,11 +153,20 @@ fun JournalPage(
         modifier = modifier.padding(horizontal = 8.dp),
     ) {
         itemsIndexed(paragraphs, key = { _, item -> item.index }) { index, paragraph ->
-            EmotionalDescription(
+            PageRowInput(
                 modifier = Modifier.fillMaxWidth(),
-                paragraph = paragraph,
-                onParagraphChanged = onJournalEntryChanged,
-                onParagraphFocusChanged = onParagraphFocusChanged,
+                isTitle = paragraph.isTitle,
+                isFocused = paragraph.isFocused,
+                textField = paragraph.textFieldValue,
+                onParagraphTextChanged = {
+                    onJournalEntryTextChanged(paragraph, it)
+                },
+                onParagraphFocusChanged = { isFocused ->
+                    onParagraphFocusChanged(
+                        paragraph.copy(isFocused = isFocused),
+                        TextRange(paragraph.data.length)
+                    )
+                },
                 onAddNewRow = {
                     onNewRowAdded(index)
                 }
@@ -178,81 +174,6 @@ fun JournalPage(
         }
     }
 }
-
-@Composable
-fun EmotionalDescription(
-    modifier: Modifier,
-    paragraph: Paragraph,
-    onParagraphChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
-    onParagraphFocusChanged: (paragraph: Paragraph, cursorSelection: TextRange) -> Unit,
-    onAddNewRow: () -> Unit,
-) {
-    Row(
-        modifier = modifier,
-    ) {
-        val focusRequester = remember { FocusRequester() }
-        LaunchedEffect(paragraph.index) {
-            if (paragraph.isFocused) {
-                focusRequester.requestFocus()
-            }
-        }
-        val textStyle = if (paragraph.isTitle) {
-            MaterialTheme.typography.titleLarge
-        } else {
-            MaterialTheme.typography.bodyLarge
-        }
-        var textField by remember {
-            mutableStateOf(
-                TextFieldValue(
-                    annotatedString = AnnotatedString(paragraph.data),
-                    selection = TextRange(paragraph.data.length)
-                )
-            )
-        }
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .focusRequester(focusRequester)
-                .onFocusChanged { focusState ->
-                    onParagraphFocusChanged(
-                        paragraph.copy(isFocused = focusState.isFocused),
-                        textField.selection
-                    )
-                },
-            value = textField,
-            onValueChange = { text ->
-                textField = text
-                onParagraphChanged(
-                    paragraph.copy(data = text.text, isFocused = true),
-                    textField.selection
-                )
-            },
-            placeholder = {},
-            textStyle = textStyle,
-            colors = TextFieldDefaults.paragraphInputColors(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Go
-            ),
-            keyboardActions = KeyboardActions(
-                onGo = {
-                    onAddNewRow()
-                },
-            ),
-        )
-    }
-}
-
-@Composable
-private fun TextFieldDefaults.paragraphInputColors() = colors(
-    focusedContainerColor = Color.Transparent,
-    disabledContainerColor = Color.Transparent,
-    unfocusedContainerColor = Color.Transparent,
-    errorContainerColor = Color.Transparent,
-    focusedIndicatorColor = Color.Transparent,
-    disabledIndicatorColor = Color.Transparent,
-    unfocusedIndicatorColor = Color.Transparent,
-)
 
 @PreviewScreenSizes
 @Composable
@@ -265,10 +186,12 @@ private fun JournalContentPreview() {
                     paragraph = listOf(
                         Paragraph(
                             isTitle = true,
-                            data = "Title"
+                            data = "Title",
+                            textFieldValue = TextFieldValue("Title")
                         ),
                         Paragraph(
-                            data = "Body"
+                            data = "Body",
+                            textFieldValue = TextFieldValue("Body")
                         )
                     ),
                     emoji = "😊",

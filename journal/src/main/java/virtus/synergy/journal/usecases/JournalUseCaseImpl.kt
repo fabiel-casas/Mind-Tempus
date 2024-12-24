@@ -1,5 +1,7 @@
 package virtus.synergy.journal.usecases
 
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
@@ -27,7 +29,10 @@ class JournalUseCaseImpl(
     dataBase: MindTempusDataBase
 ) : JournalUseCase {
     private val journalDao = dataBase.journalDao()
-    override suspend fun createJournalEntryWithEmotionLevel(emotionLevel: Int, emoji: String): String {
+    override suspend fun createJournalEntryWithEmotionLevel(
+        emotionLevel: Int,
+        emoji: String
+    ): String {
         val newEmotionalStatus = journalEntryTable(emotionLevel = emotionLevel, emoji = emoji)
         createJournalEntry(newEmotionalStatus)
         return newEmotionalStatus.id
@@ -71,8 +76,8 @@ class JournalUseCaseImpl(
     override suspend fun getOrCreateJournalEntryBy(journalId: String): JournalInfo {
         return journalDao.getJournalBy(journalId = journalId)
             ?.toJournalInfo() ?: journalEntryTable(id = journalId).let {
-                createJournalEntry(it)
-                it.toJournalInfo()
+            createJournalEntry(it)
+            it.toJournalInfo()
         }
     }
 
@@ -88,16 +93,19 @@ class JournalUseCaseImpl(
             Paragraph(
                 data = "",
                 isTitle = true,
+                textFieldValue = TextFieldValue("")
             )
         )
     } else {
         try {
+            //TODO improve the caching system to avoid possible crashes
             Gson().fromJson(note, object : TypeToken<List<Paragraph>>() {}.type)
         } catch (error: JsonSyntaxException) {
             error.logError("Error parsing journal note")
             listOf(
                 Paragraph(
-                    data = note
+                    data = note,
+                    textFieldValue = TextFieldValue(note, TextRange(note.length))
                 )
             )
         }
