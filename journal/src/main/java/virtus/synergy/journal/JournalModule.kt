@@ -1,10 +1,8 @@
 package virtus.synergy.journal
 
 import androidx.room.Room
-import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import virtus.synergy.journal.extensions.JsonFileUtils
 import virtus.synergy.journal.model.db.MindTempusDataBase
 import virtus.synergy.journal.screens.journal.details.JournalDetailsViewModel
 import virtus.synergy.journal.screens.journal.list.JournalListViewModel
@@ -31,9 +29,6 @@ val journalModule = module {
         )
             .fallbackToDestructiveMigration()
             .build()
-    }
-    factory {
-        JsonFileUtils(get())
     }
     factory<JournalUseCase> {
         JournalUseCaseImpl(get())
