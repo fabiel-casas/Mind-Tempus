@@ -4,15 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.withStyle
-import kotlinx.serialization.Serializable
 import virtus.synergy.design_system.R
 import java.util.UUID
 
@@ -28,14 +21,6 @@ data class JournalInfo(
     val emotionalIndex: Int? = null,
 )
 
-@Serializable
-data class FormattedRange(
-    val start: Int,
-    val end: Int,
-    val isBold: Boolean = false,
-    val isItalic: Boolean = false
-)
-
 data class Paragraph(
     val index: String = UUID.randomUUID().toString(),
     val textFieldValue: TextFieldValue,
@@ -44,40 +29,13 @@ data class Paragraph(
     val isTitle: Boolean = false,
     val isBold: Boolean = false,
     val isItalic: Boolean = false,
-    val formattedRanges: List<FormattedRange> = emptyList()
 )
 
 fun Paragraph.newTextFieldValue(textRange: TextRange?): TextFieldValue {
     return TextFieldValue(
-        annotatedString = buildAnnotatedString(),
+        text = data,
         selection = textRange ?: TextRange(data.length),
     )
-}
-
-private fun Paragraph.buildAnnotatedString(): AnnotatedString {
-    return buildAnnotatedString {
-        val originalText = data
-        val ranges = formattedRanges.sortedBy { it.start }
-        var currentIndex = 0
-
-        for (range in ranges) {
-            if (currentIndex < range.start) {
-                append(originalText.substring(currentIndex, range.start))
-            }
-            withStyle(
-                style = SpanStyle(
-                    fontWeight = if (range.isBold) FontWeight.Bold else FontWeight.Normal,
-                    fontStyle = if (range.isItalic) FontStyle.Italic else FontStyle.Normal
-                )
-            ) {
-                append(originalText.substring(range.start, range.end))
-            }
-            currentIndex = range.end
-        }
-        if (currentIndex < originalText.length) {
-            append(originalText.substring(currentIndex))
-        }
-    }
 }
 
 sealed class JournalParagraphTools(

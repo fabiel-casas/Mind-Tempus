@@ -36,15 +36,16 @@ class JournalDetailsViewModel(
     }
 
     fun onParagraphTextChanged(newParagraph: Paragraph, textField: TextFieldValue) {
+        if (textField.text == newParagraph.data && textField.selection == lastCursorPosition) return
         lastCursorPosition = textField.selection
-        val updatedParagraph = newParagraph.copy(data = textField.text, isFocused = true)
         journalInfo.apply {
             value = value.copy(
                 paragraph = value.paragraph.map { paragraph ->
                     if (newParagraph.index == paragraph.index) {
-                        val newTextField = updatedParagraph.newTextFieldValue(lastCursorPosition)
                         newParagraph.copy(
-                            textFieldValue = newTextField
+                            data = textField.text,
+                            isFocused = true,
+                            textFieldValue = textField
                         )
                     } else {
                         paragraph
@@ -118,50 +119,48 @@ class JournalDetailsViewModel(
 
     private fun applyBoldToSelection(paragraph: Paragraph, selection: TextRange?): Paragraph {
         if (selection == null) return paragraph
-        val updatedRanges = paragraph.formattedRanges.toMutableList()
-        // Check if the selection is already bold
-        //TODO fix the range selection loop when the text is within a formatted range bold and is applied italic
-        val rangeToRemove = updatedRanges.filter {
-            it.start >= selection.start && it.end <= selection.end && it.isBold
+        val regex = Regex("\\*\\*(.*?)\\*\\*")
+
+        val textUpdated = regex.addOrRemoveFormatting(paragraph, selection, "**")
+        return paragraph.copy(data = textUpdated)
+    }
+
+    private fun Regex.addOrRemoveFormatting(
+        paragraph: Paragraph,
+        selection: TextRange,
+        formatting: String = "**"
+    ): String {
+        val matchedBoldSelection = findAll(paragraph.data).map { match ->
+            val start = match.range.first // Start index of the match
+            val end = match.range.last // End index of the match
+            val content = match.groupValues[1] // The content inside **
+            Triple(content, start, end)
+        }.firstOrNull {
+            it.second >= selection.start && it.third <= selection.end
         }
-        if (rangeToRemove.isNotEmpty()) {
-            // Remove bold formatting
-            updatedRanges.removeAll(rangeToRemove)
+        return if (matchedBoldSelection != null) {
+            // Remove formatting
+            paragraph.data.replaceRange(
+                matchedBoldSelection.second - formatting.length,
+                matchedBoldSelection.third + formatting.length,
+                matchedBoldSelection.first
+            )
         } else {
-            // Add bold formatting
-            updatedRanges.add(
-                FormattedRange(
-                    start = selection.start,
-                    end = selection.end,
-                    isBold = true
-                )
+            // Add formatting
+            val selectedText = paragraph.data.substring(selection.start, selection.end)
+            paragraph.data.replaceRange(
+                selection.start,
+                selection.end,
+                "$formatting$selectedText$formatting"
             )
         }
-        return paragraph.copy(formattedRanges = updatedRanges)
     }
 
     private fun applyItalicToSelection(paragraph: Paragraph, selection: TextRange?): Paragraph {
         if (selection == null) return paragraph
-        val updatedRanges = paragraph.formattedRanges.toMutableList()
-        // Check if the selection is already italic
-        //TODO fix the range selection loop when the text is within a formatted range italic and is applied bold
-        val rangeToRemove = updatedRanges.filter {
-            it.start >= selection.start && it.end <= selection.end && it.isItalic
-        }
-        if (rangeToRemove.isNotEmpty()) {
-            // Remove bold formatting
-            updatedRanges.removeAll(rangeToRemove)
-        } else {
-            // Add italic formatting
-            updatedRanges.add(
-                FormattedRange(
-                    start = selection.start,
-                    end = selection.end,
-                    isItalic = true
-                )
-            )
-        }
-        return paragraph.copy(formattedRanges = updatedRanges)
+        val regex = Regex("\\*(.*?)\\*")
+        val textUpdated = regex.addOrRemoveFormatting(paragraph, selection, "*")
+        return paragraph.copy(data = textUpdated)
     }
 
     fun onParagraphFocusChanged(

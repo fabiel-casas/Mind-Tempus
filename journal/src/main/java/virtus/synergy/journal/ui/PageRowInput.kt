@@ -22,7 +22,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import virtus.synergy.design_system.theme.MindTempusTheme
-import virtus.synergy.journal.screens.journal.details.FormattedRange
 import virtus.synergy.journal.screens.journal.details.Paragraph
 
 /**
@@ -86,6 +85,7 @@ fun PageRowInput(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Go
             ),
+            visualTransformation = markdownVisualTransformation(),
             keyboardActions = KeyboardActions(
                 onGo = {
                     onAddNewRow()
@@ -112,24 +112,6 @@ private fun PageRowInputPreview() {
     val text = remember {
         Paragraph(
             data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            formattedRanges = listOf(
-                FormattedRange(
-                    start = 0,
-                    end = 5,
-                    isBold = true
-                ),
-                FormattedRange(
-                    start = 6,
-                    end = 11,
-                    isItalic = true
-                ),
-                FormattedRange(
-                    start = 12,
-                    end = 27,
-                    isBold = true,
-                    isItalic = true
-                ),
-            ),
             textFieldValue = TextFieldValue(""),
         )
     }
