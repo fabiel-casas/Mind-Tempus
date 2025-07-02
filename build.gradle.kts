@@ -14,8 +14,17 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 tasks.register<Delete>("clean") {
     delete(rootProject.buildDir)
+}
+
+subprojects {
+    afterEvaluate { // Ensure this runs after the android plugin has been applied
+        project.extensions.findByType(com.android.build.gradle.BaseExtension::class.java)?.apply {
+            compileSdkVersion(36) // Or your desired API level
+        }
+    }
 }

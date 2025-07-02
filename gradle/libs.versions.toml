@@ -1,36 +1,38 @@
 [versions]
-androidGradlePlugin = "8.7.2"
-googleServicesPlugin = "4.4.2"
-firebaseCrashlyticsPlugin = "3.0.2"
-kotlinAndroidPlugin = "1.8.20"
+androidGradlePlugin = "8.11.0"
+googleServicesPlugin = "4.4.3"
+firebaseCrashlyticsPlugin = "3.0.4"
+kotlinAndroidPlugin = "2.2.0"
 kotlinGradlePluginVersion = "1.8.20"
-kotlinSerializationPlugin = "1.7.22"
-activityComposeVersion = "1.9.1"
-accompanistPermissionsVersion = "0.31.1-alpha"
+kotlinSerializationPlugin = "2.2.0"
+activityComposeVersion = "1.10.1"
+accompanistPermissionsVersion = "0.37.3"
 androidxTestJunitVersion = "1.2.1"
-appCompatVersion = "1.7.0"
-composeVersion = "2024.11.00"
-composeJUnit4Version = "1.6.8"
-coreKtxVersion = "1.15.0"
+appCompatVersion = "1.7.1"
+composeVersion = "2025.06.01"
+composeJUnit4Version = "1.8.3"
+coreKtxVersion = "1.16.0"
 composeMarkdownVersion = "0.3.4"
 composeCoilVersion = "2.3.0"
-composeConstraintLayoutVersion = "1.0.1"
+composeConstraintLayoutVersion = "1.1.1"
 coroutinesAndroidVersion = "1.7.3"
 espressoCoreVersion = "3.6.1"
-firebaseBomVersion = "33.6.0"
+firebaseBomVersion = "33.16.0"
 glanceAppwidgetHostVersion = "0.2.2"
 glanceAppwidgetVersion = "1.1.0"
 glanceAppwidgetViewerVersion = "0.2.2"
-gsonVersion = "2.10.1"
-koinVersion = "4.0.0"
-lifecycleVersion = "2.8.4"
-playServicesAdsVersion = "23.3.0"
-navVersion = "2.7.7"
+gsonVersion = "2.13.1"
+koinVersion = "4.1.0"
+lifecycleVersion = "2.9.1"
+playServicesAdsVersion = "24.4.0"
+navVersion = "2.9.1"
 materialVersion = "1.12.0"
-roomVersion = "2.6.1"
-serializationJsonVersion = "1.3.3"
-workRuntimeKtxVersion = "2.9.1"
-githubTripletPlayVersion = "3.11.0"
+roomVersion = "2.7.2"
+serializationJsonVersion = "1.9.0"
+workRuntimeKtxVersion = "2.10.2"
+githubTripletPlayVersion = "3.12.1"
+firebaseAnalyticsVersion = "22.5.0"
+
 
 [libraries]
 activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
@@ -57,10 +59,7 @@ espressoCore = { group = "androidx.test.espresso", name = "espresso-core", versi
 firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBomVersion" }
 firebaseCrashlyticsKtx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebaseAnalyticsKtx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
-glanceAppwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glanceAppwidgetVersion" }
-glanceWearTiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "glanceAppwidgetVersion" }
-glanceAppwidgetHost = { group = "com.google.android.glance.tools", name = "appwidget-host", version.ref = "glanceAppwidgetHostVersion" }
-glanceAppwidgetViewer = { group = "com.google.android.glance.tools", name = "appwidget-viewer", version.ref = "glanceAppwidgetViewerVersion" }
+firebaseAnalytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalyticsVersion" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gsonVersion" }
 junit = { group = "junit", name = "junit" }
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlinGradlePluginVersion" }
@@ -80,6 +79,7 @@ workRuntimeKtx = { group = "androidx.work", name = "work-runtime-ktx", version.r
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinAndroidPlugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
 gradle = { id = "com.android.tools.build.gradle", version.ref = "androidGradlePlugin" }

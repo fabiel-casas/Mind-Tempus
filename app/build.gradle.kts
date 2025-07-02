@@ -1,9 +1,9 @@
 import java.io.FileInputStream
 import java.util.Properties
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
@@ -21,13 +21,13 @@ keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
     namespace = "virtus.synergy.mindtempus"
-    compileSdk = 35
+    compileSdk = 36
     val appVersionCode: Int by rootProject.extra
 
     defaultConfig {
         applicationId = "virtus.synergy.mindtempus"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = appVersionCode
         versionName = "0.0.4"
 
@@ -63,23 +63,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
 }
 

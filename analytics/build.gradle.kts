@@ -1,38 +1,25 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "virtus.synergy.analytics"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 28
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles (
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
 }
 
