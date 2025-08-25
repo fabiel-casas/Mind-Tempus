@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.mandatorySystemGesturesPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -83,6 +84,7 @@ fun EmotionsSelectorContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .mandatorySystemGesturesPadding()
             .flowTag("journal")
             .screenTag("emotionalLevel")
             .elementTag("emotionalLevelScreen")

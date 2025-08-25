@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.mandatorySystemGesturesPadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -85,6 +86,7 @@ private fun JournalEntryScreenContent(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
+            .mandatorySystemGesturesPadding()
             .flowTag("journal")
             .screenTag("createJournalEntry")
             .trackOnDisplay(),
