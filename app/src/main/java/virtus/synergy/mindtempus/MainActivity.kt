@@ -19,32 +19,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
-//            statusBarStyle = SystemBarStyle.auto(
-//                Color.Transparent.toArgb(), // Light scrim (effectively the background when opaque content doesn't reach)
-//                Color.Transparent.toArgb(), // Dark scrim (effectively the background)
-//            ),
-//            navigationBarStyle = SystemBarStyle.auto(
-//                Color.Transparent.toArgb(), // Light scrim/background
-//                Color.Transparent.toArgb()  // Dark scrim/background
-//            )
+            statusBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(), // Light scrim (effectively the background when opaque content doesn't reach)
+                Color.Transparent.toArgb(), // Dark scrim (effectively the background)
+            ),
+            navigationBarStyle = SystemBarStyle.auto(
+                Color.Transparent.toArgb(), // Light scrim/background
+                Color.Transparent.toArgb()  // Dark scrim/background
+            )
         )
         setContent {
             MindTempusTheme {
-                KoinAndroidContext {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onBackground
-                    ) {
-                        MainNavigationHost(
-                            onOpenExternalActivity = {
-                                startActivity(it)
-                            },
-                            onOpenAd = {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                ) {
+                    MainNavigationHost(
+                        onOpenExternalActivity = {
+                            startActivity(it)
+                        },
+                        onOpenAd = {
 
-                            }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
