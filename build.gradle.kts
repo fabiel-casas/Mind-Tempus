@@ -18,13 +18,24 @@ plugins {
 }
 
 tasks.register<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 
 subprojects {
     afterEvaluate { // Ensure this runs after the android plugin has been applied
         project.extensions.findByType(com.android.build.gradle.BaseExtension::class.java)?.apply {
             compileSdkVersion(36) // Or your desired API level
+        }
+    }
+    plugins.withId("org.jetbrains.kotlin.android") {
+        // This block configures any module with the Kotlin Android plugin.
+        // We need to get the 'kotlin' extension first.
+        val kotlinExtension =
+            extensions.getByType<org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension>()
+        kotlinExtension.apply {
+            // Set the JVM toolchain for Kotlin, which also aligns Java compilation.
+            // Let's set it to 17 to match your original Kotlin target.
+            jvmToolchain(21)
         }
     }
 }
