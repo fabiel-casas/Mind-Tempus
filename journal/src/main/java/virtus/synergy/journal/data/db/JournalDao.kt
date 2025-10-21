@@ -1,4 +1,4 @@
-package virtus.synergy.journal.model.db
+package virtus.synergy.journal.data.db
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,8 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import virtus.synergy.journal.model.tables.JournalEntryTable
 import kotlinx.coroutines.flow.Flow
+import virtus.synergy.journal.data.tables.JournalEntryTable
 
 @Dao
 interface JournalDao {

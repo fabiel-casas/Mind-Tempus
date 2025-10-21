@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import virtus.synergy.core.toHourMinutes
 import virtus.synergy.journal.Constants.EMOJI_TIME
 import virtus.synergy.journal.Constants.NOTIFICATION_TIME
-import virtus.synergy.journal.model.ZonedDateTimeDeserializer
+import virtus.synergy.journal.data.ZonedDateTimeDeserializer
 import virtus.synergy.journal.screens.settings.SettingsInfo
 import java.time.LocalDate
 import java.time.LocalTime

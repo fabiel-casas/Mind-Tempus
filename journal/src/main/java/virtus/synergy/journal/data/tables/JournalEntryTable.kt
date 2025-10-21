@@ -1,9 +1,9 @@
-package virtus.synergy.journal.model.tables
+package virtus.synergy.journal.data.tables
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import virtus.synergy.core.DataClass
 import com.google.gson.annotations.SerializedName
+import virtus.synergy.core.DataClass
 import java.time.ZonedDateTime
 import java.util.UUID
 

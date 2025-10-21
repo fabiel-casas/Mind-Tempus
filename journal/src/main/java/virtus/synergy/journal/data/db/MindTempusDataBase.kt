@@ -1,10 +1,10 @@
-package virtus.synergy.journal.model.db
+package virtus.synergy.journal.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import virtus.synergy.journal.model.ZonedDateTimeTypeConverter
-import virtus.synergy.journal.model.tables.JournalEntryTable
+import virtus.synergy.journal.data.ZonedDateTimeTypeConverter
+import virtus.synergy.journal.data.tables.JournalEntryTable
 
 
 @Database(

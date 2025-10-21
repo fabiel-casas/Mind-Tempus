@@ -12,8 +12,8 @@ import virtus.synergy.core.toDayMonthYearTime
 import virtus.synergy.core.toDayOfTheWeek
 import virtus.synergy.core.toHourMinutes
 import virtus.synergy.core.toMonthYear
-import virtus.synergy.journal.model.db.MindTempusDataBase
-import virtus.synergy.journal.model.tables.JournalEntryTable
+import virtus.synergy.journal.data.db.MindTempusDataBase
+import virtus.synergy.journal.data.tables.JournalEntryTable
 import virtus.synergy.journal.screens.journal.details.JournalInfo
 import virtus.synergy.journal.screens.journal.details.Paragraph
 import virtus.synergy.journal.screens.journal.list.JournalItemState

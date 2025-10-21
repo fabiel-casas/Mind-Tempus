@@ -1,4 +1,4 @@
-package virtus.synergy.journal.model
+package virtus.synergy.journal.data
 
 import androidx.room.TypeConverter
 import java.time.ZoneId

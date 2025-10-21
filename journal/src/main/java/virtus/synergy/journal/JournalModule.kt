@@ -3,7 +3,7 @@ package virtus.synergy.journal
 import androidx.room.Room
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import virtus.synergy.journal.model.db.MindTempusDataBase
+import virtus.synergy.journal.data.db.MindTempusDataBase
 import virtus.synergy.journal.screens.journal.details.JournalDetailsViewModel
 import virtus.synergy.journal.screens.journal.list.JournalListViewModel
 import virtus.synergy.journal.screens.journal.selector.EmotionsSelectorViewModel
